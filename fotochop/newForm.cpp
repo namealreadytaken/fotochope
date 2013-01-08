@@ -32,7 +32,6 @@ void newForm::on_pushButton_clicked() {
         widget.resultLabel->setMinimumHeight(resultSize.height());
         widget.resultLabel->setMinimumWidth(resultSize.width());
         
-        
         this->setWindowTitle("LOLILOL");
         image = image.scaled(resultSize, Qt::KeepAspectRatio);
         QImage fixedImage(resultSize, QImage::Format_ARGB32_Premultiplied);
@@ -49,4 +48,5 @@ void newForm::on_pushButton_clicked() {
             fixedImage.save(fileName);
         }
     }
+    
 }
