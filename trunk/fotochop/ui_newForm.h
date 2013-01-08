@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'newForm.ui'
 **
-** Created: Tue 8. Jan 14:23:18 2013
+** Created: Tue 8. Jan 14:44:09 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -18,12 +18,16 @@
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
+#include <QtGui/QScrollArea>
+#include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_newForm
 {
 public:
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
     QPushButton *pushButton;
     QLabel *resultLabel;
 
@@ -31,15 +35,30 @@ public:
     {
         if (newForm->objectName().isEmpty())
             newForm->setObjectName(QString::fromUtf8("newForm"));
-        newForm->resize(400, 300);
-        pushButton = new QPushButton(newForm);
+        newForm->resize(800, 600);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(newForm->sizePolicy().hasHeightForWidth());
+        newForm->setSizePolicy(sizePolicy);
+        scrollArea = new QScrollArea(newForm);
+        scrollArea->setObjectName(QString::fromUtf8("scrollArea"));
+        scrollArea->setGeometry(QRect(0, 0, 800, 600));
+        scrollArea->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 798, 598));
+        pushButton = new QPushButton(scrollAreaWidgetContents);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(10, 0, 93, 28));
-        resultLabel = new QLabel(newForm);
+        pushButton->setGeometry(QRect(0, 0, 93, 28));
+        resultLabel = new QLabel(scrollAreaWidgetContents);
         resultLabel->setObjectName(QString::fromUtf8("resultLabel"));
-        resultLabel->setGeometry(QRect(120, 0, 200, 200));
+        resultLabel->setGeometry(QRect(90, 0, 200, 200));
+        sizePolicy.setHeightForWidth(resultLabel->sizePolicy().hasHeightForWidth());
+        resultLabel->setSizePolicy(sizePolicy);
         resultLabel->setMinimumSize(QSize(200, 200));
         resultLabel->setScaledContents(false);
+        scrollArea->setWidget(scrollAreaWidgetContents);
 
         retranslateUi(newForm);
 
