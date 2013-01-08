@@ -7,7 +7,7 @@
 
 #include "newForm.h"
 #include <QtGui>
-
+#include <iostream>
 newForm::newForm() {
     widget.setupUi(this);
     //   widget.pushButton->setAutoDefault(false);
@@ -22,10 +22,10 @@ void newForm::on_pushButton_clicked() {
 
     QSize resultSize(300, 300);
     protu = QImage(resultSize, QImage::Format_ARGB32_Premultiplied);
-    QString fileName = QFileDialog::getOpenFileName(this, "Choisir image");
+    QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image","",tr("Images (*.png *.jpg)"));
     QImage image;
     if (!fileName.isEmpty()) {
-
+       
         image.load(fileName);
         resultSize.setHeight(image.height());
         resultSize.setWidth(image.width());
@@ -43,7 +43,7 @@ void newForm::on_pushButton_clicked() {
                 (resultSize.height() - image.height()) / 2), image);
         painter.end();
         widget.resultLabel->setPixmap(QPixmap::fromImage(fixedImage));
-        fileName = QFileDialog::getSaveFileName(this, "Enregistrer image");
+fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"),"",tr("Image PNG (*.png);;Image JPG (*.jpg)"));
         if (!fileName.isEmpty()) {
             fixedImage.save(fileName);
         }
