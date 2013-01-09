@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'newForm.ui'
 **
-** Created: Wed 9. Jan 06:15:03 2013
+** Created: Wed 9. Jan 13:05:05 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -20,7 +20,6 @@
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
 #include <QtGui/QScrollArea>
-#include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -31,7 +30,8 @@ public:
     QGridLayout *gridLayout;
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
-    QVBoxLayout *verticalLayout;
+    QGridLayout *gridLayout_2;
+    QPushButton *cropButton;
     QPushButton *pushButton;
     QLabel *resultLabel;
 
@@ -45,6 +45,7 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(newForm->sizePolicy().hasHeightForWidth());
         newForm->setSizePolicy(sizePolicy);
+        newForm->setMouseTracking(false);
         gridLayout = new QGridLayout(newForm);
         gridLayout->setSpacing(0);
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -65,12 +66,17 @@ public:
         sizePolicy.setHeightForWidth(scrollAreaWidgetContents->sizePolicy().hasHeightForWidth());
         scrollAreaWidgetContents->setSizePolicy(sizePolicy);
         scrollAreaWidgetContents->setMinimumSize(QSize(0, 598));
-        verticalLayout = new QVBoxLayout(scrollAreaWidgetContents);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        gridLayout_2 = new QGridLayout(scrollAreaWidgetContents);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        cropButton = new QPushButton(scrollAreaWidgetContents);
+        cropButton->setObjectName(QString::fromUtf8("cropButton"));
+
+        gridLayout_2->addWidget(cropButton, 0, 0, 1, 1);
+
         pushButton = new QPushButton(scrollAreaWidgetContents);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
 
-        verticalLayout->addWidget(pushButton);
+        gridLayout_2->addWidget(pushButton, 0, 1, 1, 1);
 
         resultLabel = new QLabel(scrollAreaWidgetContents);
         resultLabel->setObjectName(QString::fromUtf8("resultLabel"));
@@ -79,7 +85,7 @@ public:
         resultLabel->setMinimumSize(QSize(200, 200));
         resultLabel->setScaledContents(false);
 
-        verticalLayout->addWidget(resultLabel);
+        gridLayout_2->addWidget(resultLabel, 1, 0, 1, 2);
 
         scrollArea->setWidget(scrollAreaWidgetContents);
 
@@ -97,6 +103,7 @@ public:
     void retranslateUi(QDialog *newForm)
     {
         newForm->setWindowTitle(QApplication::translate("newForm", "newForm", 0, QApplication::UnicodeUTF8));
+        cropButton->setText(QApplication::translate("newForm", "Crop", 0, QApplication::UnicodeUTF8));
         pushButton->setText(QApplication::translate("newForm", "Chargez!", 0, QApplication::UnicodeUTF8));
         resultLabel->setText(QString());
     } // retranslateUi

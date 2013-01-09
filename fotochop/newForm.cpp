@@ -11,9 +11,10 @@
 
 newForm::newForm() {
     widget.setupUi(this);
+    widget.resultLabel->installEventFilter(this);
     //   widget.pushButton->setAutoDefault(false);
     //    connect(widget.pushButton, SIGNAL(clicked()), this, SLOT(checkValues()));
-
+    crop = false;
 }
 
 newForm::~newForm() {
@@ -50,6 +51,11 @@ void newForm::on_pushButton_clicked() {
 
 }
 
+void newForm::on_cropButton_clicked() {
+    crop = true;
+
+}
+
 void newForm::setLabelSize(QSize s) {
     widget.resultLabel->setMinimumHeight(s.height());
     widget.resultLabel->setMinimumWidth(s.width());
@@ -60,4 +66,31 @@ void newForm::setLabelSize(QSize s) {
 
 void newForm::setImage(QImage i) {
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
+}
+
+bool newForm::eventFilter(QObject* watched, QEvent* event) {
+    if (watched != widget.resultLabel)
+        return false;
+    if (event->type() != QEvent::MouseButtonPress && event->type() != QEvent::MouseButtonRelease)
+        return false;
+    const QMouseEvent * const me = static_cast<const QMouseEvent*> (event);
+    //might want to check the buttons here
+    QPoint p = me->globalPos(); //...or ->globalPos();
+    p = widget.resultLabel->mapFromGlobal(p);
+    if (crop) {
+        if (event->type() == QEvent::MouseButtonPress) {
+            pstart = p;
+        } else if (event->type() == QEvent::MouseButtonRelease) {
+            QImage img = widget.resultLabel->pixmap()->toImage();
+            QImage* cropped = new QImage(abs(pstart.x() - p.x()), abs(pstart.y() - p.y()), QImage::Format_ARGB32_Premultiplied);
+            for (int i = pstart.x(); i < p.x(); i++) {
+                for (int j = pstart.y(); j < p.y(); j++) {
+                    cropped->setPixel(i - pstart.x(), j - pstart.y(), img.pixel(i, j));
+                }
+            }
+            widget.resultLabel->setPixmap(QPixmap::fromImage(*cropped));
+            crop = false;
+        }
+    }
+    return false;
 }
