@@ -19,6 +19,7 @@ public:
     virtual ~newForm();
     void setLabelSize(QSize s);
     void setImage(QImage i);
+	QImage resize(QImage i, int width, int height);
 public slots:
     void on_pushButton_clicked();
     void on_cropButton_clicked();
