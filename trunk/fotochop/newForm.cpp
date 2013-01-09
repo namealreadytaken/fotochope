@@ -8,6 +8,7 @@
 #include "newForm.h"
 #include <QtGui>
 #include <iostream>
+
 newForm::newForm() {
     widget.setupUi(this);
     //   widget.pushButton->setAutoDefault(false);
@@ -22,18 +23,16 @@ void newForm::on_pushButton_clicked() {
 
     QSize resultSize(300, 300);
     protu = QImage(resultSize, QImage::Format_ARGB32_Premultiplied);
-    QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image","",tr("Images (*.png *.jpg)"));
+    QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image", "", tr("Images (*.png *.jpg)"));
     QImage image;
     if (!fileName.isEmpty()) {
-       
+
         image.load(fileName);
         resultSize.setHeight(image.height());
         resultSize.setWidth(image.width());
         widget.resultLabel->setMinimumHeight(resultSize.height());
         widget.resultLabel->setMinimumWidth(resultSize.width());
-        
-        this->setWindowTitle("LOLILOL");
-        image = image.scaled(resultSize, Qt::KeepAspectRatio);
+        //        image = image.scaled(resultSize, Qt::KeepAspectRatio);
         QImage fixedImage(resultSize, QImage::Format_ARGB32_Premultiplied);
         QPainter painter(&fixedImage);
         painter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -43,10 +42,22 @@ void newForm::on_pushButton_clicked() {
                 (resultSize.height() - image.height()) / 2), image);
         painter.end();
         widget.resultLabel->setPixmap(QPixmap::fromImage(fixedImage));
-fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"),"",tr("Image PNG (*.png);;Image JPG (*.jpg)"));
+        fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image PNG (*.png);;Image JPG (*.jpg)"));
         if (!fileName.isEmpty()) {
             fixedImage.save(fileName);
         }
     }
-    
+
+}
+
+void newForm::setLabelSize(QSize s) {
+    widget.resultLabel->setMinimumHeight(s.height());
+    widget.resultLabel->setMinimumWidth(s.width());
+    widget.scrollAreaWidgetContents->adjustSize();
+
+
+}
+
+void newForm::setImage(QImage i) {
+    widget.resultLabel->setPixmap(QPixmap::fromImage(i));
 }

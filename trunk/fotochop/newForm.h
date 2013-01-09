@@ -17,6 +17,8 @@ class newForm : public QDialog {
 public:
     newForm();
     virtual ~newForm();
+    void setLabelSize(QSize s);
+    void setImage(QImage i);
 public slots:
     void on_pushButton_clicked();
 private:
