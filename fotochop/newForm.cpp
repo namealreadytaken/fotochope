@@ -83,12 +83,15 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
         } else if (event->type() == QEvent::MouseButtonRelease) {
             QImage img = widget.resultLabel->pixmap()->toImage();
             QImage* cropped = new QImage(abs(pstart.x() - p.x()), abs(pstart.y() - p.y()), QImage::Format_ARGB32_Premultiplied);
-            for (int i = pstart.x(); i < p.x(); i++) {
-                for (int j = pstart.y(); j < p.y(); j++) {
-                    cropped->setPixel(i - pstart.x(), j - pstart.y(), img.pixel(i, j));
+            for (int i = std::min(pstart.x(), p.x()); i < std::max(pstart.x(), p.x()); i++) {
+                for (int j = std::min(pstart.y(), p.y()); j < std::max(pstart.y(), p.y()); j++) {
+                    cropped->setPixel(i - std::min(pstart.x(), p.x()), j - std::min(pstart.y(), p.y()), img.pixel(i, j));
                 }
             }
             widget.resultLabel->setPixmap(QPixmap::fromImage(*cropped));
+            widget.resultLabel->adjustSize();
+            widget.scrollAreaWidgetContents->adjustSize();
+
             crop = false;
         }
     }
