@@ -21,9 +21,13 @@ public:
     void setImage(QImage i);
 public slots:
     void on_pushButton_clicked();
+    void on_cropButton_clicked();
 private:
     Ui::newForm widget;
     QImage protu;
+    bool crop;
+    QPoint pstart;
+    bool eventFilter(QObject* watched, QEvent* event);
 };
 
 #endif	/* _NEWFORM_H */
