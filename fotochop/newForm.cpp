@@ -73,7 +73,7 @@ QImage  newForm::resize(QImage image, int width, int height){
     double ratioh = double(image.width())/double(width);
 	
     QImage* image2;image2 = new QImage(width,height, QImage::Format_ARGB32_Premultiplied);
-	for (int i = 0; i < image.width(); i=i+ratioh)
+	for (int i = 0; i < image.width(); i=i+ratioh){
 		for (int j = 0; j < image.height(); j=j+ratiov) {
             image2->setPixel(i/ratioh, j/ratiov, image.pixel(i, j));
         }
