@@ -67,6 +67,19 @@ void newForm::setLabelSize(QSize s) {
 void newForm::setImage(QImage i) {
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
 }
+QImage  newForm::resize(QImage i, int width, int height){
+
+    double ratiov = double(image.height())/double(height);
+    double ratioh = double(image.width())/double(width);
+	
+    QImage* image2;image2 = new QImage(width,height, QImage::Format_ARGB32_Premultiplied);
+	for (int i = 0; i < i.width(); i=i+ratioh)
+		for (int j = 0; j < i.height(); j=j+ratiov) {
+            image2->setPixel(i/ratioh, j/ratiov, i.pixel(i, j));
+        }
+    }
+    return *image2;
+}
 
 bool newForm::eventFilter(QObject* watched, QEvent* event) {
     if (watched != widget.resultLabel)
