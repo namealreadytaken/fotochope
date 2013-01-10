@@ -77,8 +77,8 @@ QImage newForm::resize(QImage image, int width, int height) {
     QImage* image3 = new QImage(image.width(), height, QImage::Format_ARGB32_Premultiplied);
     if (ratiov > 1) {// on fait la diminution verticale
         for (int i = 0; i < image.width(); i++) {
-            for (int j = 0; j < image.height(); j++) {
-                image3->setPixel(i, j, image.pixel(i, int(j * ratiov)));
+            for (int j = 0; j < image.height(); j+=ratiov) {
+                image3->setPixel(i, j/ratiov, image.pixel(i, j));
             }
         }
     } else {
@@ -93,9 +93,9 @@ QImage newForm::resize(QImage image, int width, int height) {
     }
 
     if (ratioh > 1) {// on fait la diminution horizontale
-        for (int i = 0; i < image3->width(); i++) {
+        for (int i = 0; i < image3->width(); i+=ratioh) {
             for (int j = 0; j < image3->height(); j++) {
-                image2->setPixel(i, j, image3->pixel(int(i * ratioh), j));
+                image2->setPixel(i/ratioh, j, image3->pixel(i, j));
             }
         }
     } else {
