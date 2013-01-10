@@ -67,18 +67,55 @@ void newForm::setLabelSize(QSize s) {
 void newForm::setImage(QImage i) {
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
 }
-QImage  newForm::resize(QImage image, int width, int height){
 
-    double ratiov = double(image.height())/double(height);
-    double ratioh = double(image.width())/double(width);
-	
-    QImage* image2;image2 = new QImage(width,height, QImage::Format_ARGB32_Premultiplied);
-	for (int i = 0; i < image.width(); i=i+ratioh){
-		for (int j = 0; j < image.height(); j=j+ratiov) {
-            image2->setPixel(i/ratioh, j/ratiov, image.pixel(i, j));
+QImage newForm::resize(QImage image, int width, int height) {
+
+    double ratiov = double(image.height()) / double(height);
+    double ratioh = double(image.width()) / double(width);
+    std::cout << ratiov << ratioh << std::endl;
+    QImage* image2 = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    QImage* image3 = new QImage(image.width(), height, QImage::Format_ARGB32_Premultiplied);
+    if (ratiov > 1) {// on fait la diminution verticale
+        for (int i = 0; i < image.width(); i++) {
+            for (int j = 0; j < image.height(); j++) {
+                image3->setPixel(i, j, image.pixel(i, int(j * ratiov)));
+            }
+        }
+    } else {
+        for (int i = 0; i < image.width(); i++) {
+            for (int j = 0; j < image.height(); j++) {
+                //          image3->setPixel(i, j, image.pixel(i, int(j * ratiov)));
+                for (int k = j * (double) ((double) 1 / ratiov); k <= j * (double) ((double) 1 / ratiov) + (double) ((double) 1 / ratiov); k++) {
+                    image3->setPixel(i, k, image.pixel(i, j));
+                }
+            }
+        }
+    }
+
+    if (ratioh > 1) {// on fait la diminution horizontale
+        for (int i = 0; i < image3->width(); i++) {
+            for (int j = 0; j < image3->height(); j++) {
+                image2->setPixel(i, j, image3->pixel(int(i * ratioh), j));
+            }
+        }
+    } else {
+        for (int i = 0; i < image3->width(); i++) {
+            for (int j = 0; j < image3->height(); j++) {
+                for (int k = i * (double) ((double) 1 / ratioh); k < i * (double) ((double) 1 / ratioh) + (double) ((double) 1 / ratiov); k++) {
+                    image2->setPixel(k, j, image3->pixel(i, j));
+                }
+            }
         }
     }
     return *image2;
+    //    QImage* image2;
+    //    image2 = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    //    for (int i = 0; i < image.width(); i = i + ratioh) {
+    //        for (int j = 0; j < image.height(); j = j + ratiov) {
+    //            image2->setPixel(i / ratioh, j / ratiov, image.pixel(i, j));
+    //        }
+    //    }
+    //    return *image2;
 }
 
 bool newForm::eventFilter(QObject* watched, QEvent* event) {
