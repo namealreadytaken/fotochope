@@ -13,8 +13,6 @@
 newForm::newForm() {
     widget.setupUi(this);
     widget.resultLabel->installEventFilter(this);
-    //   widget.pushButton->setAutoDefault(false);
-    //    connect(widget.pushButton, SIGNAL(clicked()), this, SLOT(checkValues()));
     crop = false;
     pipette = false;
 }
@@ -29,12 +27,10 @@ void newForm::on_loadButton_clicked() {
     QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image", "", tr("Images (*.png *.jpg)"));
     QImage image;
     if (!fileName.isEmpty()) {
-
         image.load(fileName);
         resultSize.setHeight(image.height());
         resultSize.setWidth(image.width());
-        widget.resultLabel->setMinimumHeight(resultSize.height());
-        widget.resultLabel->setMinimumWidth(resultSize.width());
+        setLabelSize(resultSize);
         widget.resultLabel->setPixmap(QPixmap::fromImage(image));
         img = image;
     }
@@ -42,7 +38,6 @@ void newForm::on_loadButton_clicked() {
 
 void newForm::on_cropButton_clicked() {
     crop = true;
-
 }
 
 void newForm::on_pipetteButton_clicked() {
@@ -76,7 +71,7 @@ void newForm::setImage(QImage i) {
 }
 
 void newForm::on_resizeButton_clicked() {
-    Resize* r = new Resize(this,widget.resultLabel->pixmap()->toImage());
+    Resize* r = new Resize(this, widget.resultLabel->pixmap()->toImage());
     r->show();
 }
 
@@ -86,8 +81,7 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
     if (event->type() != QEvent::MouseButtonPress && event->type() != QEvent::MouseButtonRelease)
         return false;
     const QMouseEvent * const me = static_cast<const QMouseEvent*> (event);
-    //might want to check the buttons here
-    QPoint p = me->globalPos(); //...or ->globalPos();
+    QPoint p = me->globalPos();
     p = widget.resultLabel->mapFromGlobal(p);
     if (crop) {
         if (event->type() == QEvent::MouseButtonPress) {
@@ -103,7 +97,6 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
             widget.resultLabel->setPixmap(QPixmap::fromImage(*cropped));
             widget.resultLabel->adjustSize();
             widget.scrollAreaWidgetContents->adjustSize();
-
             crop = false;
         }
     } else if (pipette) {
@@ -124,13 +117,12 @@ void newForm::greyScale() {
             image.setPixel(i, j, pxToGrey(image.pixel(i, j)));
         }
     }
-    widget.resultLabel->setPixmap(QPixmap::fromImage(image));
-
+    setImage(image);
 }
 
 QRgb newForm::pxToGrey(QRgb px) {
     QColor* color = new QColor(px);
-    int a = (color->red()*0.21 + 0.71 * color->green() + 0.07 * color->blue());
+    int a = (color->red()*0.21 + 0.71 * color->green() + 0.07 * color->blue()); //d'après la C.I.E (Commission Internationale de l'Éclairage)
     color->setRed(a);
     color->setBlue(a);
     color->setGreen(a);
