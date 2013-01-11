@@ -128,6 +128,7 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
     //might want to check the buttons here
     QPoint p = me->globalPos(); //...or ->globalPos();
     p = widget.resultLabel->mapFromGlobal(p);
+    pipette=true;
     if (crop) {
         if (event->type() == QEvent::MouseButtonPress) {
             pstart = p;
@@ -145,6 +146,15 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
 
             crop = false;
         }
+    }
+    else if(pipette)
+    {
+        QRgb px = widget.resultLabel->pixmap()->toImage().pixel(p.x(), p.y());
+        QColor* color = new QColor(px);
+        int r,g,b,a;
+        color->getRgb(&r,&g,&b,&a);
+        std::cout<<r<<g<<b<<a<<std::endl;
+        pipette=false;
     }
     return false;
 }
