@@ -71,12 +71,14 @@ void newForm::on_saveButton_clicked() {
 void newForm::setLabelSize(QSize s) {
     widget.resultLabel->setMinimumHeight(s.height());
     widget.resultLabel->setMinimumWidth(s.width());
+    widget.resultLabel->setMaximumHeight(s.height());
+    widget.resultLabel->setMaximumWidth(s.width());
     widget.scrollAreaWidgetContents->adjustSize();
 }
 
 void newForm::setImage(QImage i) {
+    setLabelSize(i.size());
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
-    
 }
 
 void newForm::on_resizeButton_clicked() {
