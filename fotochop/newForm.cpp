@@ -22,16 +22,11 @@ newForm::~newForm() {
 
 void newForm::on_loadButton_clicked() {
 
-    QSize resultSize(300, 300);
-    img = QImage(resultSize, QImage::Format_ARGB32_Premultiplied);
-    QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image", "", tr("Images (*.png *.jpg)"));
+    QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image", "", tr("Images (*.png *.jpg *.gif *.pnm)"));
     QImage image;
     if (!fileName.isEmpty()) {
         image.load(fileName);
-        resultSize.setHeight(image.height());
-        resultSize.setWidth(image.width());
-        setLabelSize(resultSize);
-        widget.resultLabel->setPixmap(QPixmap::fromImage(image));
+        setImage(image);
         img = image;
     }
 }
@@ -46,6 +41,10 @@ void newForm::on_pipetteButton_clicked() {
 
 void newForm::on_greyButton_clicked() {
     greyScale();
+}
+
+void newForm::on_blurButton_clicked() {
+    blur();
 }
 
 void newForm::on_saveButton_clicked() {
@@ -127,4 +126,56 @@ QRgb newForm::pxToGrey(QRgb px) {
     color->setBlue(a);
     color->setGreen(a);
     return color->rgb();
+}
+
+void newForm::blur() {
+    int sum[4];
+    int radius = 2, out;
+
+    QImage image = widget.resultLabel->pixmap()->toImage();
+    QImage dest = image;
+    QImage tmp = image;
+    QColor* c = NULL;
+    for (int i = 0; i < image.width(); i++) {
+        for (int j = 0; j < image.height(); j++) {
+            for (int s = 0; s < 4; s++)
+                sum[s] = 0;
+            out = 0;
+            for (int kx = -radius; kx <= radius; ++kx) {
+                if (i + kx < image.width() && i + kx >= 0) {
+                    c = new QColor(image.pixel(i + kx, j));
+                    sum[0] += c->red();
+                    sum[1] += c->green();
+                    sum[2] += c->blue();
+                    sum[3] += c->alpha();
+                } else {
+                    out++;
+                }
+            }
+            c->setRgb(sum[0] / (radius * 2 + 1 - out), sum[1] / (radius * 2 + 1 - out), sum[2] / (radius * 2 + 1 - out), c->alpha() / (radius * 2 + 1 - out));
+            tmp.setPixel(i, j, c->rgb());
+        }
+    }
+    for (int i = 0; i < image.width(); i++) {
+        for (int j = 0; j < image.height(); j++) {
+            for (int s = 0; s < 4; s++)
+                sum[s] = 0;
+            out = 0;
+            for (int ky = -radius; ky <= radius; ++ky) {
+
+                if (j + ky < image.height() && j + ky >= 0) {
+                    c = new QColor(tmp.pixel(i, j + ky));
+                    sum[0] += c->red();
+                    sum[1] += c->green();
+                    sum[2] += c->blue();
+                    sum[3] += c->alpha();
+                } else {
+                    out++;
+                }
+            }
+            c->setRgb(sum[0] / (radius * 2 + 1 - out), sum[1] / (radius * 2 + 1 - out), sum[2] / (radius * 2 + 1 - out), c->alpha() / (radius * 2 + 1 - out));
+            dest.setPixel(i, j, c->rgb());
+        }
+    }
+    setImage(dest);
 }

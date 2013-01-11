@@ -18,4 +18,3 @@ int main(int argc, char *argv[]) {
     // create and show your widgets here
     return app.exec();
 }
-

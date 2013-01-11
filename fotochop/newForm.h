@@ -20,6 +20,7 @@ public:
     void setLabelSize(QSize s);
     void setImage(QImage i);
     void greyScale();
+    void blur();
 public slots:
     void on_loadButton_clicked();
     void on_cropButton_clicked();
@@ -27,6 +28,7 @@ public slots:
     void on_resizeButton_clicked();
     void on_pipetteButton_clicked();
     void on_greyButton_clicked();
+    void on_blurButton_clicked();
 private:
     Ui::newForm widget;
     QImage img;
