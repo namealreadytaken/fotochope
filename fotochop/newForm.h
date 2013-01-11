@@ -27,6 +27,7 @@ private:
     Ui::newForm widget;
     QImage protu;
     bool crop;
+    bool pipette;
     QPoint pstart;
     bool eventFilter(QObject* watched, QEvent* event);
 };
