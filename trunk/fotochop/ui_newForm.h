@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'newForm.ui'
 **
-** Created: Thu 10. Jan 03:43:26 2013
+** Created: Fri 11. Jan 11:49:57 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -32,14 +32,16 @@ public:
     QWidget *scrollAreaWidgetContents;
     QGridLayout *gridLayout_2;
     QPushButton *cropButton;
-    QPushButton *pushButton;
+    QPushButton *loadButton;
+    QPushButton *resizeButton;
     QLabel *resultLabel;
+    QPushButton *saveButton;
 
     void setupUi(QDialog *newForm)
     {
         if (newForm->objectName().isEmpty())
             newForm->setObjectName(QString::fromUtf8("newForm"));
-        newForm->resize(798, 649);
+        newForm->resize(783, 658);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -70,13 +72,21 @@ public:
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         cropButton = new QPushButton(scrollAreaWidgetContents);
         cropButton->setObjectName(QString::fromUtf8("cropButton"));
+        cropButton->setMaximumSize(QSize(70, 16777215));
 
-        gridLayout_2->addWidget(cropButton, 0, 0, 1, 1);
+        gridLayout_2->addWidget(cropButton, 1, 0, 1, 1);
 
-        pushButton = new QPushButton(scrollAreaWidgetContents);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        loadButton = new QPushButton(scrollAreaWidgetContents);
+        loadButton->setObjectName(QString::fromUtf8("loadButton"));
+        loadButton->setMaximumSize(QSize(70, 16777215));
 
-        gridLayout_2->addWidget(pushButton, 0, 1, 1, 1);
+        gridLayout_2->addWidget(loadButton, 0, 0, 1, 1);
+
+        resizeButton = new QPushButton(scrollAreaWidgetContents);
+        resizeButton->setObjectName(QString::fromUtf8("resizeButton"));
+        resizeButton->setMaximumSize(QSize(70, 16777215));
+
+        gridLayout_2->addWidget(resizeButton, 2, 0, 1, 1);
 
         resultLabel = new QLabel(scrollAreaWidgetContents);
         resultLabel->setObjectName(QString::fromUtf8("resultLabel"));
@@ -85,7 +95,13 @@ public:
         resultLabel->setMinimumSize(QSize(200, 200));
         resultLabel->setScaledContents(false);
 
-        gridLayout_2->addWidget(resultLabel, 1, 0, 1, 2);
+        gridLayout_2->addWidget(resultLabel, 0, 2, 7, 2);
+
+        saveButton = new QPushButton(scrollAreaWidgetContents);
+        saveButton->setObjectName(QString::fromUtf8("saveButton"));
+        saveButton->setMaximumSize(QSize(70, 16777215));
+
+        gridLayout_2->addWidget(saveButton, 3, 0, 1, 1);
 
         scrollArea->setWidget(scrollAreaWidgetContents);
 
@@ -104,8 +120,10 @@ public:
     {
         newForm->setWindowTitle(QApplication::translate("newForm", "newForm", 0, QApplication::UnicodeUTF8));
         cropButton->setText(QApplication::translate("newForm", "Crop", 0, QApplication::UnicodeUTF8));
-        pushButton->setText(QApplication::translate("newForm", "Chargez!", 0, QApplication::UnicodeUTF8));
+        loadButton->setText(QApplication::translate("newForm", "Load", 0, QApplication::UnicodeUTF8));
+        resizeButton->setText(QApplication::translate("newForm", "Resize", 0, QApplication::UnicodeUTF8));
         resultLabel->setText(QString());
+        saveButton->setText(QApplication::translate("newForm", "Save", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

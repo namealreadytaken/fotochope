@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'newForm.h'
 **
-** Created: Fri 11. Jan 04:57:58 2013
+** Created: Fri 11. Jan 11:52:54 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_newForm[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       2,   14, // methods
+       4,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -33,13 +33,16 @@ static const uint qt_meta_data_newForm[] = {
  // slots: signature, parameters, type, tag, flags
        9,    8,    8,    8, 0x0a,
       33,    8,    8,    8, 0x0a,
+      57,    8,    8,    8, 0x0a,
+      81,    8,    8,    8, 0x0a,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_newForm[] = {
-    "newForm\0\0on_pushButton_clicked()\0"
-    "on_cropButton_clicked()\0"
+    "newForm\0\0on_loadButton_clicked()\0"
+    "on_cropButton_clicked()\0on_saveButton_clicked()\0"
+    "on_resizeButton_clicked()\0"
 };
 
 void newForm::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -48,8 +51,10 @@ void newForm::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         Q_ASSERT(staticMetaObject.cast(_o));
         newForm *_t = static_cast<newForm *>(_o);
         switch (_id) {
-        case 0: _t->on_pushButton_clicked(); break;
+        case 0: _t->on_loadButton_clicked(); break;
         case 1: _t->on_cropButton_clicked(); break;
+        case 2: _t->on_saveButton_clicked(); break;
+        case 3: _t->on_resizeButton_clicked(); break;
         default: ;
         }
     }
@@ -88,9 +93,9 @@ int newForm::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 2)
+        if (_id < 4)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 2;
+        _id -= 4;
     }
     return _id;
 }
