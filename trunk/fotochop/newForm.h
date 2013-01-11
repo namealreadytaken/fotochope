@@ -24,6 +24,7 @@ public slots:
     void on_cropButton_clicked();
     void on_saveButton_clicked();
     void on_resizeButton_clicked();
+    void on_pipetteButton_clicked();
 private:
     Ui::newForm widget;
     QImage protu;
