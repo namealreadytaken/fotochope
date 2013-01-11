@@ -12,11 +12,12 @@
 #include <QPainter>
 #include <QWidget>
 
-class resize : public QDialog {
+class Resize : public QDialog {
     Q_OBJECT
 public:
-    resize(QImage image);
-    virtual ~resize();
+    Resize();
+    Resize(QImage image);
+    virtual ~Resize();
     QImage resizeI(QImage image, int width, int height);
 private:
     Ui::resize widget;

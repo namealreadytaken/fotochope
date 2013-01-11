@@ -24,15 +24,13 @@ void MainMenu::on_actionOuvrir_triggered() {
 
         newForm* form = new newForm();
         image.load(fileName);
-        resultSize.setHeight(1500);
-        resultSize.setWidth(1500);
-        form->setLabelSize(resultSize);
         resultSize.setHeight(image.height());
         resultSize.setWidth(image.width());
-        QImage fixedImage(resultSize, QImage::Format_ARGB32_Premultiplied);
-        fixedImage = form->resize(image, 1500, 1500);
+        form->setLabelSize(resultSize);
+ //       QImage fixedImage(resultSize, QImage::Format_ARGB32_Premultiplied);
+        //fixedImage = form->resize(image, 1500, 1500);
 
-        form->setImage(fixedImage);
+        form->setImage(image);
         form->setWindowTitle(fileName);
         form->show();
 

@@ -9,15 +9,18 @@
 #include <QtGui>
 #include <iostream>
 
-resize::resize(QImage im) {
+Resize::Resize() {
+    widget.setupUi(this);
+}
+Resize::Resize(QImage im) {
     widget.setupUi(this);
 }
 
-resize::~resize() {
+Resize::~Resize() {
 }
 
 
-QImage resize::resizeI(QImage image, int width, int height) {
+QImage Resize::resizeI(QImage image, int width, int height) {
     QRgb px;
     double ratiov = double(image.height()) / double(height);
     double ratioh = double(image.width()) / double(width);

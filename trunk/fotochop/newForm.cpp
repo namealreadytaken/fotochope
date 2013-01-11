@@ -6,6 +6,7 @@
  */
 
 #include "newForm.h"
+#include "resize.h"
 #include <QtGui>
 #include <iostream>
 
@@ -74,7 +75,8 @@ void newForm::setImage(QImage i) {
 }
 
 void newForm::on_resizeButton_clicked(){
-    resize r = new resize(widget.resultLabel->pixmap()->toImage());
+    Resize* r = new Resize(widget.resultLabel->pixmap()->toImage());
+    r->show();
 }
 
 bool newForm::eventFilter(QObject* watched, QEvent* event) {
