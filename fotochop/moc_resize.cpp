@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'resize.h'
 **
-** Created: Fri 11. Jan 11:47:56 2013
+** Created: Fri 11. Jan 13:24:39 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-static const uint qt_meta_data_resize[] = {
+static const uint qt_meta_data_Resize[] = {
 
  // content:
        6,       // revision
@@ -33,11 +33,11 @@ static const uint qt_meta_data_resize[] = {
        0        // eod
 };
 
-static const char qt_meta_stringdata_resize[] = {
-    "resize\0"
+static const char qt_meta_stringdata_Resize[] = {
+    "Resize\0"
 };
 
-void resize::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void Resize::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     Q_UNUSED(_o);
     Q_UNUSED(_id);
@@ -45,33 +45,33 @@ void resize::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void
     Q_UNUSED(_a);
 }
 
-const QMetaObjectExtraData resize::staticMetaObjectExtraData = {
+const QMetaObjectExtraData Resize::staticMetaObjectExtraData = {
     0,  qt_static_metacall 
 };
 
-const QMetaObject resize::staticMetaObject = {
-    { &QDialog::staticMetaObject, qt_meta_stringdata_resize,
-      qt_meta_data_resize, &staticMetaObjectExtraData }
+const QMetaObject Resize::staticMetaObject = {
+    { &QDialog::staticMetaObject, qt_meta_stringdata_Resize,
+      qt_meta_data_Resize, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &resize::getStaticMetaObject() { return staticMetaObject; }
+const QMetaObject &Resize::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *resize::metaObject() const
+const QMetaObject *Resize::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *resize::qt_metacast(const char *_clname)
+void *Resize::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_resize))
-        return static_cast<void*>(const_cast< resize*>(this));
+    if (!strcmp(_clname, qt_meta_stringdata_Resize))
+        return static_cast<void*>(const_cast< Resize*>(this));
     return QDialog::qt_metacast(_clname);
 }
 
-int resize::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int Resize::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QDialog::qt_metacall(_c, _id, _a);
     if (_id < 0)

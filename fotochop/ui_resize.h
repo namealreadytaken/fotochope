@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'resize.ui'
 **
-** Created: Fri 11. Jan 11:45:55 2013
+** Created: Fri 11. Jan 13:09:51 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
