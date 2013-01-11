@@ -19,19 +19,22 @@ public:
     virtual ~newForm();
     void setLabelSize(QSize s);
     void setImage(QImage i);
+    void greyScale();
 public slots:
     void on_loadButton_clicked();
     void on_cropButton_clicked();
     void on_saveButton_clicked();
     void on_resizeButton_clicked();
     void on_pipetteButton_clicked();
+    void on_greyButton_clicked();
 private:
     Ui::newForm widget;
-    QImage protu;
+    QImage img;
     bool crop;
     bool pipette;
     QPoint pstart;
     bool eventFilter(QObject* watched, QEvent* event);
+    QRgb pxToGrey(QRgb px);
 };
 
 #endif	/* _NEWFORM_H */

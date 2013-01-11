@@ -164,6 +164,19 @@
          </property>
         </widget>
        </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="greyButton">
+         <property name="maximumSize">
+          <size>
+           <width>70</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Grey</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </widget>
