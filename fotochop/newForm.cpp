@@ -25,7 +25,7 @@ newForm::~newForm() {
 void newForm::on_loadButton_clicked() {
 
     QSize resultSize(300, 300);
-    protu = QImage(resultSize, QImage::Format_ARGB32_Premultiplied);
+    img = QImage(resultSize, QImage::Format_ARGB32_Premultiplied);
     QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image", "", tr("Images (*.png *.jpg)"));
     QImage image;
     if (!fileName.isEmpty()) {
@@ -35,19 +35,9 @@ void newForm::on_loadButton_clicked() {
         resultSize.setWidth(image.width());
         widget.resultLabel->setMinimumHeight(resultSize.height());
         widget.resultLabel->setMinimumWidth(resultSize.width());
-        //        image = image.scaled(resultSize, Qt::KeepAspectRatio);
-        QImage fixedImage(resultSize, QImage::Format_ARGB32_Premultiplied);
-        QPainter painter(&fixedImage);
-        painter.setCompositionMode(QPainter::CompositionMode_Source);
-        painter.fillRect(fixedImage.rect(), Qt::transparent);
-        painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
-        painter.drawImage(QPoint((resultSize.width() - image.width()) / 2,
-                (resultSize.height() - image.height()) / 2), image);
-        painter.end();
-        widget.resultLabel->setPixmap(QPixmap::fromImage(fixedImage));
-
+        widget.resultLabel->setPixmap(QPixmap::fromImage(image));
+        img = image;
     }
-
 }
 
 void newForm::on_cropButton_clicked() {
@@ -59,11 +49,15 @@ void newForm::on_pipetteButton_clicked() {
     pipette = true;
 }
 
+void newForm::on_pipetteButton_clicked() {
+    greyScale();
+}
+
 void newForm::on_saveButton_clicked() {
-    QImage img = widget.resultLabel->pixmap()->toImage();
+    QImage image = widget.resultLabel->pixmap()->toImage();
     QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image PNG (*.png);;Image JPG (*.jpg)"));
     if (!fileName.isEmpty()) {
-        img.save(fileName);
+        image.save(fileName);
     }
 
 }
@@ -121,4 +115,24 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
         pipette = false;
     }
     return false;
+}
+
+void newForm::greyScale() {
+    QImage image = widget.resultLabel->pixmap()->toImage();
+    for (int i = 0; i < image.width(); i++) {
+        for (int j = 0; j < image.height(); j++) {
+            image.setPixel(i, j, pxToGrey(image.pixel(i, j)));
+        }
+    }
+    widget.resultLabel->setPixmap(QPixmap::fromImage(image));
+
+}
+
+QRgb newForm::pxToGrey(QRgb px) {
+    QColor* color = new QColor(px);
+    int a = (color->red()*0.21 + 0.71 * color->green() + 0.07 * color->blue());
+    color->setRed(a);
+    color->setBlue(a);
+    color->setGreen(a);
+    return color->rgb();
 }
