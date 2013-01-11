@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'newForm.ui'
 **
-** Created: Fri 11. Jan 11:49:57 2013
+** Created: Fri 11. Jan 14:42:36 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -34,8 +34,9 @@ public:
     QPushButton *cropButton;
     QPushButton *loadButton;
     QPushButton *resizeButton;
-    QLabel *resultLabel;
     QPushButton *saveButton;
+    QLabel *resultLabel;
+    QPushButton *pipetteButton;
 
     void setupUi(QDialog *newForm)
     {
@@ -88,6 +89,12 @@ public:
 
         gridLayout_2->addWidget(resizeButton, 2, 0, 1, 1);
 
+        saveButton = new QPushButton(scrollAreaWidgetContents);
+        saveButton->setObjectName(QString::fromUtf8("saveButton"));
+        saveButton->setMaximumSize(QSize(70, 16777215));
+
+        gridLayout_2->addWidget(saveButton, 3, 0, 1, 1);
+
         resultLabel = new QLabel(scrollAreaWidgetContents);
         resultLabel->setObjectName(QString::fromUtf8("resultLabel"));
         sizePolicy.setHeightForWidth(resultLabel->sizePolicy().hasHeightForWidth());
@@ -95,13 +102,18 @@ public:
         resultLabel->setMinimumSize(QSize(200, 200));
         resultLabel->setScaledContents(false);
 
-        gridLayout_2->addWidget(resultLabel, 0, 2, 7, 2);
+        gridLayout_2->addWidget(resultLabel, 0, 2, 8, 2);
 
-        saveButton = new QPushButton(scrollAreaWidgetContents);
-        saveButton->setObjectName(QString::fromUtf8("saveButton"));
-        saveButton->setMaximumSize(QSize(70, 16777215));
+        pipetteButton = new QPushButton(scrollAreaWidgetContents);
+        pipetteButton->setObjectName(QString::fromUtf8("pipetteButton"));
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(pipetteButton->sizePolicy().hasHeightForWidth());
+        pipetteButton->setSizePolicy(sizePolicy2);
+        pipetteButton->setMaximumSize(QSize(70, 16777215));
 
-        gridLayout_2->addWidget(saveButton, 3, 0, 1, 1);
+        gridLayout_2->addWidget(pipetteButton, 4, 0, 1, 1);
 
         scrollArea->setWidget(scrollAreaWidgetContents);
 
@@ -122,8 +134,9 @@ public:
         cropButton->setText(QApplication::translate("newForm", "Crop", 0, QApplication::UnicodeUTF8));
         loadButton->setText(QApplication::translate("newForm", "Load", 0, QApplication::UnicodeUTF8));
         resizeButton->setText(QApplication::translate("newForm", "Resize", 0, QApplication::UnicodeUTF8));
-        resultLabel->setText(QString());
         saveButton->setText(QApplication::translate("newForm", "Save", 0, QApplication::UnicodeUTF8));
+        resultLabel->setText(QString());
+        pipetteButton->setText(QApplication::translate("newForm", "Picker", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
