@@ -10,13 +10,13 @@
 #include <QtGui>
 #include <iostream>
 
-
 newForm::newForm() {
     widget.setupUi(this);
     widget.resultLabel->installEventFilter(this);
     //   widget.pushButton->setAutoDefault(false);
     //    connect(widget.pushButton, SIGNAL(clicked()), this, SLOT(checkValues()));
     crop = false;
+    pipette = false;
 }
 
 newForm::~newForm() {
@@ -54,11 +54,16 @@ void newForm::on_cropButton_clicked() {
     crop = true;
 
 }
+
+void newForm::on_pipetteButton_clicked() {
+    pipette = true;
+}
+
 void newForm::on_saveButton_clicked() {
-     QImage img = widget.resultLabel->pixmap()->toImage();
+    QImage img = widget.resultLabel->pixmap()->toImage();
     QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image PNG (*.png);;Image JPG (*.jpg)"));
     if (!fileName.isEmpty()) {
-         img.save(fileName);
+        img.save(fileName);
     }
 
 }
@@ -69,12 +74,11 @@ void newForm::setLabelSize(QSize s) {
     widget.scrollAreaWidgetContents->adjustSize();
 }
 
-
 void newForm::setImage(QImage i) {
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
 }
 
-void newForm::on_resizeButton_clicked(){
+void newForm::on_resizeButton_clicked() {
     Resize* r = new Resize(widget.resultLabel->pixmap()->toImage());
     r->show();
 }
@@ -88,7 +92,6 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
     //might want to check the buttons here
     QPoint p = me->globalPos(); //...or ->globalPos();
     p = widget.resultLabel->mapFromGlobal(p);
-    pipette=true;
     if (crop) {
         if (event->type() == QEvent::MouseButtonPress) {
             pstart = p;
@@ -106,15 +109,13 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
 
             crop = false;
         }
-    }
-    else if(pipette)
-    {
+    } else if (pipette) {
         QRgb px = widget.resultLabel->pixmap()->toImage().pixel(p.x(), p.y());
         QColor* color = new QColor(px);
-        int r,g,b,a;
-        color->getRgb(&r,&g,&b,&a);
-        std::cout<<r<<g<<b<<a<<std::endl;
-        pipette=false;
+        int r, g, b, a;
+        color->getRgb(&r, &g, &b, &a);
+        std::cout << r << " " << g << " " << b << " " << a << std::endl;
+        pipette = false;
     }
     return false;
 }
