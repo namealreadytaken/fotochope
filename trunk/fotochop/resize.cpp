@@ -9,16 +9,28 @@
 #include <QtGui>
 #include <iostream>
 
+QImage image;
 Resize::Resize() {
     widget.setupUi(this);
 }
-Resize::Resize(QImage im) {
+Resize::Resize(newForm* p, QImage im) {
     widget.setupUi(this);
+    image = im;
+    pere = p;
 }
 
 Resize::~Resize() {
 }
 
+void Resize::on_cancelButton_clicked(){
+    this->close();
+}
+void Resize::on_okButton_clicked(){
+    
+    pere->setImage(resizeI(image,widget.height->text().toInt(),widget.height->text().toInt()));
+    this->close();
+
+}
 
 QImage Resize::resizeI(QImage image, int width, int height) {
     QRgb px;

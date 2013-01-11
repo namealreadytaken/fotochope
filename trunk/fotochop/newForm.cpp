@@ -76,10 +76,11 @@ void newForm::setLabelSize(QSize s) {
 
 void newForm::setImage(QImage i) {
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
+    
 }
 
 void newForm::on_resizeButton_clicked() {
-    Resize* r = new Resize(widget.resultLabel->pixmap()->toImage());
+    Resize* r = new Resize(this,widget.resultLabel->pixmap()->toImage());
     r->show();
 }
 

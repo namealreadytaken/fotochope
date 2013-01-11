@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'resize.ui'
 **
-** Created: Fri 11. Jan 13:09:51 2013
+** Created: Fri 11. Jan 13:52:32 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -15,32 +15,29 @@
 #include <QtGui/QApplication>
 #include <QtGui/QButtonGroup>
 #include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
 #include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_resize
 {
 public:
-    QDialogButtonBox *buttonBox;
     QLineEdit *width;
     QLineEdit *height;
     QLabel *label;
     QLabel *label_2;
+    QPushButton *okButton;
+    QPushButton *cancelButton;
 
     void setupUi(QDialog *resize)
     {
         if (resize->objectName().isEmpty())
             resize->setObjectName(QString::fromUtf8("resize"));
+        resize->setWindowModality(Qt::ApplicationModal);
         resize->resize(243, 177);
-        buttonBox = new QDialogButtonBox(resize);
-        buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
-        buttonBox->setGeometry(QRect(20, 130, 201, 32));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         width = new QLineEdit(resize);
         width->setObjectName(QString::fromUtf8("width"));
         width->setGeometry(QRect(90, 40, 113, 22));
@@ -53,10 +50,14 @@ public:
         label_2 = new QLabel(resize);
         label_2->setObjectName(QString::fromUtf8("label_2"));
         label_2->setGeometry(QRect(30, 40, 53, 16));
+        okButton = new QPushButton(resize);
+        okButton->setObjectName(QString::fromUtf8("okButton"));
+        okButton->setGeometry(QRect(130, 140, 93, 28));
+        cancelButton = new QPushButton(resize);
+        cancelButton->setObjectName(QString::fromUtf8("cancelButton"));
+        cancelButton->setGeometry(QRect(20, 140, 93, 28));
 
         retranslateUi(resize);
-        QObject::connect(buttonBox, SIGNAL(accepted()), resize, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), resize, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(resize);
     } // setupUi
@@ -66,6 +67,8 @@ public:
         resize->setWindowTitle(QApplication::translate("resize", "resize", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("resize", "Hauteur", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("resize", "Largeur", 0, QApplication::UnicodeUTF8));
+        okButton->setText(QApplication::translate("resize", "Ok", 0, QApplication::UnicodeUTF8));
+        cancelButton->setText(QApplication::translate("resize", "Annuler", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
