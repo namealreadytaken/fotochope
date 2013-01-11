@@ -9,6 +9,7 @@
 #include <QtGui>
 #include <iostream>
 
+
 newForm::newForm() {
     widget.setupUi(this);
     widget.resultLabel->installEventFilter(this);
@@ -20,7 +21,7 @@ newForm::newForm() {
 newForm::~newForm() {
 }
 
-void newForm::on_pushButton_clicked() {
+void newForm::on_loadButton_clicked() {
 
     QSize resultSize(300, 300);
     protu = QImage(resultSize, QImage::Format_ARGB32_Premultiplied);
@@ -43,10 +44,7 @@ void newForm::on_pushButton_clicked() {
                 (resultSize.height() - image.height()) / 2), image);
         painter.end();
         widget.resultLabel->setPixmap(QPixmap::fromImage(fixedImage));
-        fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image PNG (*.png);;Image JPG (*.jpg)"));
-        if (!fileName.isEmpty()) {
-            fixedImage.save(fileName);
-        }
+
     }
 
 }
@@ -55,68 +53,28 @@ void newForm::on_cropButton_clicked() {
     crop = true;
 
 }
+void newForm::on_saveButton_clicked() {
+     QImage img = widget.resultLabel->pixmap()->toImage();
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image PNG (*.png);;Image JPG (*.jpg)"));
+    if (!fileName.isEmpty()) {
+         img.save(fileName);
+    }
+
+}
 
 void newForm::setLabelSize(QSize s) {
     widget.resultLabel->setMinimumHeight(s.height());
     widget.resultLabel->setMinimumWidth(s.width());
     widget.scrollAreaWidgetContents->adjustSize();
-
-
 }
+
 
 void newForm::setImage(QImage i) {
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
 }
 
-QImage newForm::resize(QImage image, int width, int height) {
-    QRgb px;
-    double ratiov = double(image.height()) / double(height);
-    double ratioh = double(image.width()) / double(width);
-    std::cout << ratiov << ratioh << std::endl;
-    QImage* image2 = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
-    QImage* image3 = new QImage(image.width(), height, QImage::Format_ARGB32_Premultiplied);
-    if (ratiov > 1) {// on fait la diminution verticale
-        for (int i = 0; i < image.width(); i++) {
-            for (int j = 0; j < image.height(); j += ratiov) {
-                image3->setPixel(i, j / ratiov, image.pixel(i, j));
-            }
-        }
-    } else {
-        for (int i = 0; i < image.width(); i++) {
-            for (int j = 0; j < image.height(); j++) {
-                px = image.pixel(i, j);
-                for (int k = j * ((double) 1 / ratiov); k <= j * ((double) 1 / ratiov) + ((double) 1 / ratiov); k++) {
-                    image3->setPixel(i, k, px);
-                }
-            }
-        }
-    }
-
-    if (ratioh > 1) {// on fait la diminution horizontale
-        for (int i = 0; i < image3->width(); i += ratioh) {
-            for (int j = 0; j < image3->height(); j++) {
-                image2->setPixel(i / ratioh, j, image3->pixel(i, j));
-            }
-        }
-    } else {
-        for (int i = 0; i < image3->width(); i++) {
-            for (int j = 0; j < image3->height(); j++) {
-                px = image3->pixel(i, j);
-                for (int k = i * ((double) 1 / ratioh); k <= i * ((double) 1 / ratioh) +((double) 1 / ratioh); k++) {
-                    image2->setPixel(k, j, px);
-                }
-            }
-        }
-    }
-    return *image2;
-    //    QImage* image2;
-    //    image2 = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
-    //    for (int i = 0; i < image.width(); i = i + ratioh) {
-    //        for (int j = 0; j < image.height(); j = j + ratiov) {
-    //            image2->setPixel(i / ratioh, j / ratiov, image.pixel(i, j));
-    //        }
-    //    }
-    //    return *image2;
+void newForm::on_resizeButton_clicked(){
+    resize r = new resize(widget.resultLabel->pixmap()->toImage());
 }
 
 bool newForm::eventFilter(QObject* watched, QEvent* event) {

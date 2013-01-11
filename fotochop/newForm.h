@@ -19,10 +19,11 @@ public:
     virtual ~newForm();
     void setLabelSize(QSize s);
     void setImage(QImage i);
-	QImage resize(QImage image, int width, int height);
 public slots:
-    void on_pushButton_clicked();
+    void on_loadButton_clicked();
     void on_cropButton_clicked();
+    void on_saveButton_clicked();
+    void on_resizeButton_clicked();
 private:
     Ui::newForm widget;
     QImage protu;
