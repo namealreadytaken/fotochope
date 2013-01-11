@@ -49,7 +49,7 @@ void newForm::on_pipetteButton_clicked() {
     pipette = true;
 }
 
-void newForm::on_pipetteButton_clicked() {
+void newForm::on_greyButton_clicked() {
     greyScale();
 }
 
