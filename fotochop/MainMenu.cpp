@@ -27,9 +27,6 @@ void MainMenu::on_actionOuvrir_triggered() {
         resultSize.setHeight(image.height());
         resultSize.setWidth(image.width());
         form->setLabelSize(resultSize);
- //       QImage fixedImage(resultSize, QImage::Format_ARGB32_Premultiplied);
-        //fixedImage = form->resize(image, 1500, 1500);
-
         form->setImage(image);
         form->setWindowTitle(fileName);
         form->show();
