@@ -20,40 +20,52 @@ Pipette::Pipette(int r, int g, int b) {
     widget.line2->setText(buffer);
     itoa(b, buffer, 10);
     widget.line3->setText(buffer);
+    this->a = r;
+    this->b = g;
+    this->c = b;
+
+
 }
 
 Pipette::~Pipette() {
 }
 
 void Pipette::on_YUV_toggled() {
-    int R, G, B, Y, U, V;
+    int A, B, C;
+    double tempa, tempb, tempc;
     if (widget.YUV->isChecked()) {
-        R = widget.line1->text().toInt();
-        G = widget.line2->text().toInt();
-        B = widget.line3->text().toInt();
-        Y = 0.299 * (double) R + 0.587 * (double) G + 0.114 * (double) B;
-        U = -0.14713 * (double) R - 0.28886 * (double) G + 0.436 * (double) B;
-        V = 0.615 * (double) R - 0.51498 * (double) G - 0.10001 * (double) B;
+        tempa = 0.299 * a + 0.587 * b + 0.114 * c;
+        tempb = -0.14713 * a - 0.28886 * b + 0.436 * c;
+        tempc = 0.615 * a - 0.51498 * b - 0.10001 * c;
+        A = tempa;
+        B = tempb;
+        C = tempc;
+        a = tempa;
+        b = tempb;
+        c = tempc;
         char buffer [33];
-        itoa(Y, buffer, 10);
+        itoa(A, buffer, 10);
         widget.line1->setText(buffer);
-        itoa(U, buffer, 10);
+        itoa(B, buffer, 10);
         widget.line2->setText(buffer);
-        itoa(V, buffer, 10);
+        itoa(C, buffer, 10);
         widget.line3->setText(buffer);
     } else {
-        Y = widget.line1->text().toInt();
-        U = widget.line2->text().toInt();
-        V = widget.line3->text().toInt();
-        R = Y + 1.13983 * (double) V;
-        G = Y - 0.39465 * (double) U - 0.58060 * (double) V;
-        B = Y + 2.03211 * (double) U;
+        tempa = a + 1.13983 * c;
+        tempb = a - 0.39465 * b - 0.5806 * c;
+        tempc = a + 2.03211 * b;
+        A = tempa;
+        B = tempb;
+        C = tempc;
+        a = tempa;
+        b = tempb;
+        c = tempc;
         char buffer [33];
-        itoa(R, buffer, 10);
+        itoa(A, buffer, 10);
         widget.line1->setText(buffer);
-        itoa(G, buffer, 10);
-        widget.line2->setText(buffer);
         itoa(B, buffer, 10);
+        widget.line2->setText(buffer);
+        itoa(C, buffer, 10);
         widget.line3->setText(buffer);
     }
 }
