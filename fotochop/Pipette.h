@@ -20,6 +20,7 @@ public slots:
     void on_YUV_toggled();
 private:
     Ui::Pipette widget;
+    double a,b,c;
 };
 
 #endif	/* _PIPETTE_H */
