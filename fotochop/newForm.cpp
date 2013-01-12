@@ -7,6 +7,7 @@
 
 #include "newForm.h"
 #include "resize.h"
+#include "Pipette.h"
 #include <QtGui>
 #include <iostream>
 
@@ -103,6 +104,8 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
         QColor* color = new QColor(px);
         int r, g, b, a;
         color->getRgb(&r, &g, &b, &a);
+        Pipette* p = new Pipette(r,g,b);
+        p->show();
         std::cout << r << " " << g << " " << b << " " << a << std::endl;
         pipette = false;
     }

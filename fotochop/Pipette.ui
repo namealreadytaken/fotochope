@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Pipette</class>
+ <widget class="QDialog" name="Pipette">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>118</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Pipette</string>
+  </property>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>1</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="line1">
+       <property name="acceptDrops">
+        <bool>false</bool>
+       </property>
+       <property name="maxLength">
+        <number>3</number>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="line2">
+       <property name="acceptDrops">
+        <bool>false</bool>
+       </property>
+       <property name="maxLength">
+        <number>3</number>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="line3">
+       <property name="acceptDrops">
+        <bool>false</bool>
+       </property>
+       <property name="maxLength">
+        <number>3</number>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="4" column="1">
+    <widget class="QGroupBox" name="horizontalGroupBox_2">
+     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0">
+      <item>
+       <widget class="QRadioButton" name="RGB">
+        <property name="text">
+         <string>RGB</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="YUV">
+        <property name="text">
+         <string>YUV</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
