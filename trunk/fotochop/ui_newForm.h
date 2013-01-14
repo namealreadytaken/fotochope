@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'newForm.ui'
 **
-** Created: Fri 11. Jan 13:50:46 2013
+** Created: Mon 14. Jan 16:32:03 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -37,6 +37,8 @@ public:
     QPushButton *saveButton;
     QLabel *resultLabel;
     QPushButton *pipetteButton;
+    QPushButton *greyButton;
+    QPushButton *blurButton;
 
     void setupUi(QDialog *newForm)
     {
@@ -102,7 +104,7 @@ public:
         resultLabel->setMinimumSize(QSize(200, 200));
         resultLabel->setScaledContents(false);
 
-        gridLayout_2->addWidget(resultLabel, 0, 2, 8, 2);
+        gridLayout_2->addWidget(resultLabel, 0, 2, 9, 2);
 
         pipetteButton = new QPushButton(scrollAreaWidgetContents);
         pipetteButton->setObjectName(QString::fromUtf8("pipetteButton"));
@@ -114,6 +116,18 @@ public:
         pipetteButton->setMaximumSize(QSize(70, 16777215));
 
         gridLayout_2->addWidget(pipetteButton, 4, 0, 1, 1);
+
+        greyButton = new QPushButton(scrollAreaWidgetContents);
+        greyButton->setObjectName(QString::fromUtf8("greyButton"));
+        greyButton->setMaximumSize(QSize(70, 16777215));
+
+        gridLayout_2->addWidget(greyButton, 5, 0, 1, 1);
+
+        blurButton = new QPushButton(scrollAreaWidgetContents);
+        blurButton->setObjectName(QString::fromUtf8("blurButton"));
+        blurButton->setMaximumSize(QSize(70, 16777215));
+
+        gridLayout_2->addWidget(blurButton, 6, 0, 1, 1);
 
         scrollArea->setWidget(scrollAreaWidgetContents);
 
@@ -137,6 +151,8 @@ public:
         saveButton->setText(QApplication::translate("newForm", "Save", 0, QApplication::UnicodeUTF8));
         resultLabel->setText(QString());
         pipetteButton->setText(QApplication::translate("newForm", "Picker", 0, QApplication::UnicodeUTF8));
+        greyButton->setText(QApplication::translate("newForm", "Grey", 0, QApplication::UnicodeUTF8));
+        blurButton->setText(QApplication::translate("newForm", "Blur", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

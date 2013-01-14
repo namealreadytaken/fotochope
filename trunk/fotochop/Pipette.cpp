@@ -23,7 +23,10 @@ Pipette::Pipette(int r, int g, int b) {
     this->a = r;
     this->b = g;
     this->c = b;
-
+    QPixmap* p = new QPixmap(10, 10);
+    QColor* col = new QColor(r, g, b);
+    p->fill(*col);
+    widget.color->setPixmap(*p);
 
 }
 
