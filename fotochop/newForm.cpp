@@ -94,9 +94,7 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
                     cropped->setPixel(i - std::min(pstart.x(), p.x()), j - std::min(pstart.y(), p.y()), img.pixel(i, j));
                 }
             }
-            widget.resultLabel->setPixmap(QPixmap::fromImage(*cropped));
-            widget.resultLabel->adjustSize();
-            widget.scrollAreaWidgetContents->adjustSize();
+            setImage(*cropped);
             crop = false;
         }
     } else if (pipette) {
@@ -104,7 +102,7 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
         QColor* color = new QColor(px);
         int r, g, b, a;
         color->getRgb(&r, &g, &b, &a);
-        Pipette* p = new Pipette(r,g,b);
+        Pipette* p = new Pipette(r, g, b);
         p->show();
         std::cout << r << " " << g << " " << b << " " << a << std::endl;
         pipette = false;
