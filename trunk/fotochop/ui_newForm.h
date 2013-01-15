@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'newForm.ui'
 **
-** Created: Mon 14. Jan 16:32:03 2013
+** Created: Tue 15. Jan 17:54:15 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -39,6 +39,7 @@ public:
     QPushButton *pipetteButton;
     QPushButton *greyButton;
     QPushButton *blurButton;
+    QPushButton *histoButton;
 
     void setupUi(QDialog *newForm)
     {
@@ -104,7 +105,7 @@ public:
         resultLabel->setMinimumSize(QSize(200, 200));
         resultLabel->setScaledContents(false);
 
-        gridLayout_2->addWidget(resultLabel, 0, 2, 9, 2);
+        gridLayout_2->addWidget(resultLabel, 0, 2, 10, 2);
 
         pipetteButton = new QPushButton(scrollAreaWidgetContents);
         pipetteButton->setObjectName(QString::fromUtf8("pipetteButton"));
@@ -128,6 +129,12 @@ public:
         blurButton->setMaximumSize(QSize(70, 16777215));
 
         gridLayout_2->addWidget(blurButton, 6, 0, 1, 1);
+
+        histoButton = new QPushButton(scrollAreaWidgetContents);
+        histoButton->setObjectName(QString::fromUtf8("histoButton"));
+        histoButton->setMaximumSize(QSize(70, 16777215));
+
+        gridLayout_2->addWidget(histoButton, 7, 0, 1, 1);
 
         scrollArea->setWidget(scrollAreaWidgetContents);
 
@@ -153,6 +160,7 @@ public:
         pipetteButton->setText(QApplication::translate("newForm", "Picker", 0, QApplication::UnicodeUTF8));
         greyButton->setText(QApplication::translate("newForm", "Grey", 0, QApplication::UnicodeUTF8));
         blurButton->setText(QApplication::translate("newForm", "Blur", 0, QApplication::UnicodeUTF8));
+        histoButton->setText(QApplication::translate("newForm", "Histo", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
