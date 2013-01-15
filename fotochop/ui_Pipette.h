@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Pipette.ui'
 **
-** Created: Mon 14. Jan 16:32:03 2013
+** Created: Tue 15. Jan 17:54:15 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

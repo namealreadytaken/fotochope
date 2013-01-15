@@ -29,6 +29,7 @@ public slots:
     void on_pipetteButton_clicked();
     void on_greyButton_clicked();
     void on_blurButton_clicked();
+    void on_histoButton_clicked();
 private:
     Ui::newForm widget;
     QImage img;
@@ -37,6 +38,7 @@ private:
     QPoint pstart;
     bool eventFilter(QObject* watched, QEvent* event);
     QRgb pxToGrey(QRgb px);
+
 };
 
 #endif	/* _NEWFORM_H */

@@ -4,7 +4,7 @@
  *
  * Created on 7 janvier 2013, 17:28
  */
-
+#include "Histogramme.h"
 #include "newForm.h"
 #include "resize.h"
 #include "Pipette.h"
@@ -75,6 +75,11 @@ void newForm::on_resizeButton_clicked() {
     r->show();
 }
 
+void newForm::on_histoButton_clicked() {
+    Histogramme* h = new Histogramme(widget.resultLabel->pixmap()->toImage());
+    h->show();
+}
+
 bool newForm::eventFilter(QObject* watched, QEvent* event) {
     if (watched != widget.resultLabel)
         return false;
@@ -127,7 +132,11 @@ QRgb newForm::pxToGrey(QRgb px) {
     color->setBlue(a);
     color->setGreen(a);
     return color->rgb();
+
 }
+
+
+
 
 void newForm::blur() {
     int sum[4];
@@ -179,4 +188,5 @@ void newForm::blur() {
         }
     }
     setImage(dest);
+
 }
