@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'newForm.ui'
 **
-** Created: Tue 15. Jan 17:54:15 2013
+** Created: Tue 15. Jan 18:26:24 2013
 **      by: Qt User Interface Compiler version 4.8.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -52,6 +52,7 @@ public:
         sizePolicy.setHeightForWidth(newForm->sizePolicy().hasHeightForWidth());
         newForm->setSizePolicy(sizePolicy);
         newForm->setMouseTracking(false);
+        newForm->setSizeGripEnabled(true);
         gridLayout = new QGridLayout(newForm);
         gridLayout->setSpacing(0);
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -103,6 +104,7 @@ public:
         sizePolicy.setHeightForWidth(resultLabel->sizePolicy().hasHeightForWidth());
         resultLabel->setSizePolicy(sizePolicy);
         resultLabel->setMinimumSize(QSize(200, 200));
+        resultLabel->setLineWidth(0);
         resultLabel->setScaledContents(false);
 
         gridLayout_2->addWidget(resultLabel, 0, 2, 10, 2);

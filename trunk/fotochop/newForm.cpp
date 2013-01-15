@@ -104,12 +104,8 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
         }
     } else if (pipette) {
         QRgb px = widget.resultLabel->pixmap()->toImage().pixel(p.x(), p.y());
-        QColor* color = new QColor(px);
-        int r, g, b, a;
-        color->getRgb(&r, &g, &b, &a);
-        Pipette* p = new Pipette(r, g, b);
-        p->show();
-        std::cout << r << " " << g << " " << b << " " << a << std::endl;
+        Pipette* pi = new Pipette(qRed(px), qGreen(px), qBlue(px));
+        pi->show();
         pipette = false;
     }
     return false;
@@ -126,17 +122,9 @@ void newForm::greyScale() {
 }
 
 QRgb newForm::pxToGrey(QRgb px) {
-    QColor* color = new QColor(px);
-    int a = (color->red()*0.21 + 0.71 * color->green() + 0.07 * color->blue()); //d'après la C.I.E (Commission Internationale de l'Éclairage)
-    color->setRed(a);
-    color->setBlue(a);
-    color->setGreen(a);
-    return color->rgb();
-
+    int a = (qRed(px)*0.21 + 0.71 * qGreen(px) + 0.07 * qBlue(px)); //d'après la C.I.E (Commission Internationale de l'Éclairage)
+    return qRgba(a, a, a, qAlpha(px));
 }
-
-
-
 
 void newForm::blur() {
     int sum[4];
@@ -145,7 +133,7 @@ void newForm::blur() {
     QImage image = widget.resultLabel->pixmap()->toImage();
     QImage dest = image;
     QImage tmp = image;
-    QColor* c = NULL;
+    QRgb rgb;
     for (int i = 0; i < image.width(); i++) {
         for (int j = 0; j < image.height(); j++) {
             for (int s = 0; s < 4; s++)
@@ -153,17 +141,16 @@ void newForm::blur() {
             out = 0;
             for (int kx = -radius; kx <= radius; ++kx) {
                 if (i + kx < image.width() && i + kx >= 0) {
-                    c = new QColor(image.pixel(i + kx, j));
-                    sum[0] += c->red();
-                    sum[1] += c->green();
-                    sum[2] += c->blue();
-                    sum[3] += c->alpha();
+                    rgb = image.pixel(i + kx, j);
+                    sum[0] += qRed(rgb);
+                    sum[1] += qGreen(rgb);
+                    sum[2] += qBlue(rgb);
+                    sum[3] += qAlpha(rgb);
                 } else {
                     out++;
                 }
             }
-            c->setRgb(sum[0] / (radius * 2 + 1 - out), sum[1] / (radius * 2 + 1 - out), sum[2] / (radius * 2 + 1 - out), c->alpha() / (radius * 2 + 1 - out));
-            tmp.setPixel(i, j, c->rgb());
+            tmp.setPixel(i, j, qRgba(sum[0] / (radius * 2 + 1 - out), sum[1] / (radius * 2 + 1 - out), sum[2] / (radius * 2 + 1 - out), sum[3] / (radius * 2 + 1 - out)));
         }
     }
     for (int i = 0; i < image.width(); i++) {
@@ -174,19 +161,76 @@ void newForm::blur() {
             for (int ky = -radius; ky <= radius; ++ky) {
 
                 if (j + ky < image.height() && j + ky >= 0) {
-                    c = new QColor(tmp.pixel(i, j + ky));
-                    sum[0] += c->red();
-                    sum[1] += c->green();
-                    sum[2] += c->blue();
-                    sum[3] += c->alpha();
+                    rgb = tmp.pixel(i, j + ky);
+                    sum[0] += qRed(rgb);
+                    sum[1] += qGreen(rgb);
+                    sum[2] += qBlue(rgb);
+                    sum[3] += qAlpha(rgb);
                 } else {
                     out++;
                 }
             }
-            c->setRgb(sum[0] / (radius * 2 + 1 - out), sum[1] / (radius * 2 + 1 - out), sum[2] / (radius * 2 + 1 - out), c->alpha() / (radius * 2 + 1 - out));
-            dest.setPixel(i, j, c->rgb());
+            dest.setPixel(i, j, qRgba(sum[0] / (radius * 2 + 1 - out), sum[1] / (radius * 2 + 1 - out), sum[2] / (radius * 2 + 1 - out), sum[3] / (radius * 2 + 1 - out)));
         }
     }
     setImage(dest);
+}
 
+void newForm::Sobel() {
+    int GX[3][3];
+    int GY[3][3];
+    /* 3x3 GX Sobel mask.  Ref: www.cee.hw.ac.uk/hipr/html/sobel.html */
+    GX[0][0] = -1;
+    GX[0][1] = 0;
+    GX[0][2] = 1;
+    GX[1][0] = -2;
+    GX[1][1] = 0;
+    GX[1][2] = 2;
+    GX[2][0] = -1;
+    GX[2][1] = 0;
+    GX[2][2] = 1;
+
+    /* 3x3 GY Sobel mask.  Ref: www.cee.hw.ac.uk/hipr/html/sobel.html */
+    GY[0][0] = 1;
+    GY[0][1] = 2;
+    GY[0][2] = 1;
+    GY[1][0] = 0;
+    GY[1][1] = 0;
+    GY[1][2] = 0;
+    GY[2][0] = -1;
+    GY[2][1] = -2;
+    GY[2][2] = -1;
+    QImage source = widget.resultLabel->pixmap()->toImage();
+    QImage sobelDestination = source;
+    int width = source.width();
+    int height = source.height();
+    int I, J;
+    long sumX, sumY;
+    int SUM;
+    uint rawColour;
+
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            if (y == 0 || y >= height - 1 || x == 0 || x >= width - 1) {
+                SUM = 0;
+            } else {
+                sumX = 0;
+                sumY = 0;
+                /*-------X and Y GRADIENT APPROXIMATION------*/
+                for (I = -1; I <= 1; I++) {
+                    for (J = -1; J <= 1; J++) {
+                        rawColour = source.pixel(x + I, y + J);
+                        sumX = sumX + ((qRed(rawColour) + qGreen(rawColour) + qBlue(rawColour)) / 3) * GX[I + 1][J + 1];
+                        sumY = sumY + ((qRed(rawColour) + qGreen(rawColour) + qBlue(rawColour)) / 3) * GY[I + 1][J + 1];
+                    }
+                }
+                SUM = abs(sumX) + abs(sumY); /*---GRADIENT MAGNITUDE APPROXIMATION (Myler p.218)----*/
+                if (SUM > 255)
+                    SUM = 255;
+
+            }
+            sobelDestination.setPixel(x, y, qRgb(SUM, SUM, SUM));
+        }
+        setImage(sobelDestination);
+    }
 }

@@ -22,6 +22,9 @@
   <property name="windowTitle">
    <string>newForm</string>
   </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="margin">
     <number>0</number>
@@ -133,6 +136,9 @@
            <width>200</width>
            <height>200</height>
           </size>
+         </property>
+         <property name="lineWidth">
+          <number>0</number>
          </property>
          <property name="text">
           <string/>
