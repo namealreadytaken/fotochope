@@ -49,8 +49,8 @@ void newForm::on_blurButton_clicked() {
 }
 
 void newForm::on_saveButton_clicked() {
-    QImage image = widget.resultLabel->pixmap()->toImage();
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image PNG (*.png);;Image JPG (*.jpg)"));
+    QImage image = img;
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image PNG (*.png);;Image JPG (*.jpg);;Image BMP (*.bmp);;Image TIFF (*.tiff)"));
     if (!fileName.isEmpty()) {
         image.save(fileName);
     }
@@ -67,16 +67,17 @@ void newForm::setLabelSize(QSize s) {
 
 void newForm::setImage(QImage i) {
     setLabelSize(i.size());
+    img = i;
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
 }
 
 void newForm::on_resizeButton_clicked() {
-    Resize* r = new Resize(this, widget.resultLabel->pixmap()->toImage());
+    Resize* r = new Resize(this, img);
     r->show();
 }
 
 void newForm::on_histoButton_clicked() {
-    Histogramme* h = new Histogramme(widget.resultLabel->pixmap()->toImage());
+    Histogramme* h = new Histogramme(img);
     h->show();
 }
 
@@ -92,7 +93,7 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
         if (event->type() == QEvent::MouseButtonPress) {
             pstart = p;
         } else if (event->type() == QEvent::MouseButtonRelease) {
-            QImage img = widget.resultLabel->pixmap()->toImage();
+            QImage img = img;
             QImage* cropped = new QImage(abs(pstart.x() - p.x()), abs(pstart.y() - p.y()), QImage::Format_ARGB32_Premultiplied);
             for (int i = std::min(pstart.x(), p.x()); i < std::max(pstart.x(), p.x()); i++) {
                 for (int j = std::min(pstart.y(), p.y()); j < std::max(pstart.y(), p.y()); j++) {
@@ -103,7 +104,7 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
             crop = false;
         }
     } else if (pipette) {
-        QRgb px = widget.resultLabel->pixmap()->toImage().pixel(p.x(), p.y());
+        QRgb px = img.pixel(p.x(), p.y());
         Pipette* pi = new Pipette(qRed(px), qGreen(px), qBlue(px));
         pi->show();
         pipette = false;
@@ -112,7 +113,7 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void newForm::greyScale() {
-    QImage image = widget.resultLabel->pixmap()->toImage();
+    QImage image = img;
     for (int i = 0; i < image.width(); i++) {
         for (int j = 0; j < image.height(); j++) {
             image.setPixel(i, j, pxToGrey(image.pixel(i, j)));
@@ -129,8 +130,7 @@ QRgb newForm::pxToGrey(QRgb px) {
 void newForm::blur() {
     int sum[4];
     int radius = 2, out;
-
-    QImage image = widget.resultLabel->pixmap()->toImage();
+    QImage image = img;
     QImage dest = image;
     QImage tmp = image;
     QRgb rgb;
@@ -200,7 +200,8 @@ void newForm::Sobel() {
     GY[2][0] = -1;
     GY[2][1] = -2;
     GY[2][2] = -1;
-    QImage source = widget.resultLabel->pixmap()->toImage();
+
+    QImage source = img;
     QImage sobelDestination = source;
     int width = source.width();
     int height = source.height();
