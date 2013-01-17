@@ -22,6 +22,7 @@ public:
     void greyScale();
     void blur();
     void Sobel();
+    void filtrer(int filtre[3][3]);
 public slots:
     void on_loadButton_clicked();
     void on_cropButton_clicked();
@@ -31,6 +32,7 @@ public slots:
     void on_greyButton_clicked();
     void on_blurButton_clicked();
     void on_histoButton_clicked();
+    void on_filtreButton_clicked();
 private:
     Ui::newForm widget;
     QImage img;

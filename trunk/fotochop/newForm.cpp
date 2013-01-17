@@ -8,6 +8,7 @@
 #include "newForm.h"
 #include "resize.h"
 #include "Pipette.h"
+#include "filtre.h"
 #include <QtGui>
 #include <iostream>
 
@@ -46,6 +47,11 @@ void newForm::on_greyButton_clicked() {
 
 void newForm::on_blurButton_clicked() {
     blur();
+}
+
+void newForm::on_filtreButton_clicked() {
+    Filtre* f = new Filtre(this);
+    f->show();
 }
 
 void newForm::on_saveButton_clicked() {
@@ -93,11 +99,11 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
         if (event->type() == QEvent::MouseButtonPress) {
             pstart = p;
         } else if (event->type() == QEvent::MouseButtonRelease) {
-            QImage img = img;
+            QImage image = img;
             QImage* cropped = new QImage(abs(pstart.x() - p.x()), abs(pstart.y() - p.y()), QImage::Format_ARGB32_Premultiplied);
             for (int i = std::min(pstart.x(), p.x()); i < std::max(pstart.x(), p.x()); i++) {
                 for (int j = std::min(pstart.y(), p.y()); j < std::max(pstart.y(), p.y()); j++) {
-                    cropped->setPixel(i - std::min(pstart.x(), p.x()), j - std::min(pstart.y(), p.y()), img.pixel(i, j));
+                    cropped->setPixel(i - std::min(pstart.x(), p.x()), j - std::min(pstart.y(), p.y()), image.pixel(i, j));
                 }
             }
             setImage(*cropped);
@@ -159,7 +165,6 @@ void newForm::blur() {
                 sum[s] = 0;
             out = 0;
             for (int ky = -radius; ky <= radius; ++ky) {
-
                 if (j + ky < image.height() && j + ky >= 0) {
                     rgb = tmp.pixel(i, j + ky);
                     sum[0] += qRed(rgb);
@@ -235,3 +240,48 @@ void newForm::Sobel() {
         setImage(sobelDestination);
     }
 }
+
+void newForm::filtrer(int filtre[3][3]) {
+    int width = img.width();
+    int height = img.height();
+    int total = 0;
+    QImage dest = img;
+    int out;
+    int sum[4];
+    int I, J;
+    QRgb rgb;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            total += filtre[i][j];
+        }
+    }
+    std::cout << total;
+
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            for (int s = 0; s < 4; s++)
+                sum[s] = 0;
+            out = 0;
+            for (I = -1; I <= 1; I++) {
+                for (J = -1; J <= 1; J++) {
+                    if (y + I < height && y + I >= 0 && x + J < width && x + J >= 0) {
+                        rgb = img.pixel(x + J, y + I);
+                        sum[0] += qRed(rgb) * filtre[I + 1][J + 1];
+                        sum[1] += qGreen(rgb) * filtre[I + 1][J + 1];
+                        sum[2] += qBlue(rgb) * filtre[I + 1][J + 1];
+                        sum[3] += qAlpha(rgb) * filtre[I + 1][J + 1];
+                    } else {
+                        out++;
+                    }
+                }
+            }
+
+            dest.setPixel(x, y, qRgba(sum[0] % 256 / 1, sum[1] % 256 / 1, sum[2] % 256 / 1, sum[3] % 256 / 1));
+
+        }
+    }
+    setImage(dest);
+}
+
+
