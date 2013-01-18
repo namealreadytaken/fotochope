@@ -50,6 +50,7 @@ void newForm::on_blurButton_clicked() {
 }
 
 void newForm::on_filtreButton_clicked() {
+
     Filtre* f = new Filtre(this);
     f->show();
 }
@@ -60,7 +61,6 @@ void newForm::on_saveButton_clicked() {
     if (!fileName.isEmpty()) {
         image.save(fileName);
     }
-
 }
 
 void newForm::setLabelSize(QSize s) {
@@ -256,8 +256,10 @@ void newForm::filtrer(int filtre[3][3]) {
             total += filtre[i][j];
         }
     }
+    if (total == 0)
+        total++;
+    total = (total);
     std::cout << total;
-
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             for (int s = 0; s < 4; s++)
@@ -272,12 +274,19 @@ void newForm::filtrer(int filtre[3][3]) {
                         sum[2] += qBlue(rgb) * filtre[I + 1][J + 1];
                         sum[3] += qAlpha(rgb) * filtre[I + 1][J + 1];
                     } else {
-                        out++;
+                        out += filtre[I + 1][J + 1];
                     }
                 }
             }
-
-            dest.setPixel(x, y, qRgba(sum[0] % 256 / 1, sum[1] % 256 / 1, sum[2] % 256 / 1, sum[3] % 256 / 1));
+            //            for (int s = 0; s < 4; s++) {
+            //                if (sum[s] > 255 || sum[s]<-255) {
+            //                    sum[s] = 255;
+            //                }
+            //            }
+            if (total - out == 0) {
+                total++;
+            }
+            dest.setPixel(x, y, qRgba(std::min(abs(sum[0]) / (total - out), 255), std::min(abs(sum[1]) / (total - out), 255), std::min(abs(sum[2]) / (total - out), 255), std::min(abs(sum[3]) / (total - out), 255)));
 
         }
     }
