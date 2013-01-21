@@ -18,6 +18,7 @@ public:
     virtual ~Filtre();
 public slots:
     void on_okButton_clicked();
+    void on_presets_activated(int);
 private:
     Ui::filtre widget;
     newForm* pere;

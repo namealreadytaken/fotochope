@@ -13,11 +13,14 @@
   <property name="windowTitle">
    <string>filtre</string>
   </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
   <widget class="QLineEdit" name="l1">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>50</y>
+     <x>90</x>
+     <y>70</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -29,8 +32,8 @@
   <widget class="QLineEdit" name="l2">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>50</y>
+     <x>140</x>
+     <y>70</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -42,8 +45,8 @@
   <widget class="QLineEdit" name="l3">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>50</y>
+     <x>190</x>
+     <y>70</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -55,8 +58,8 @@
   <widget class="QLineEdit" name="l4">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>80</y>
+     <x>90</x>
+     <y>100</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -68,8 +71,8 @@
   <widget class="QLineEdit" name="l5">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>80</y>
+     <x>140</x>
+     <y>100</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -81,8 +84,8 @@
   <widget class="QLineEdit" name="l6">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>80</y>
+     <x>190</x>
+     <y>100</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -94,8 +97,8 @@
   <widget class="QLineEdit" name="l7">
    <property name="geometry">
     <rect>
-     <x>100</x>
-     <y>110</y>
+     <x>90</x>
+     <y>130</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -107,8 +110,8 @@
   <widget class="QLineEdit" name="l8">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>110</y>
+     <x>140</x>
+     <y>130</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -120,8 +123,8 @@
   <widget class="QLineEdit" name="l9">
    <property name="geometry">
     <rect>
-     <x>200</x>
-     <y>110</y>
+     <x>190</x>
+     <y>130</y>
      <width>41</width>
      <height>22</height>
     </rect>
@@ -133,7 +136,7 @@
   <widget class="QPushButton" name="okButton">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>110</x>
      <y>200</y>
      <width>93</width>
      <height>28</height>
@@ -141,6 +144,49 @@
    </property>
    <property name="text">
     <string>OK</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="presets">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>20</y>
+     <width>111</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>Nul</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Inverse</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Rehaussement</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Gradient</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLineEdit" name="diviseur">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>170</y>
+     <width>41</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>1</string>
    </property>
   </widget>
  </widget>
