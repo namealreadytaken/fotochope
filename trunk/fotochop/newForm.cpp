@@ -68,7 +68,19 @@ void newForm::setLabelSize(QSize s) {
     widget.resultLabel->setMinimumWidth(s.width());
     widget.resultLabel->setMaximumHeight(s.height());
     widget.resultLabel->setMaximumWidth(s.width());
-    widget.scrollAreaWidgetContents->adjustSize();
+    s.setHeight(s.height() + 20);
+    s.setWidth(s.width() + 90);
+    widget.scrollAreaWidgetContents->setMinimumSize(s);
+    widget.scrollAreaWidgetContents->setMaximumSize(s);
+    s.setHeight(900);
+    s.setWidth(1600);
+    //    widget.scrollAreaWidgetContents->adjustSize();
+    //    widget.scrollArea->adjustSize();
+     widget.scrollArea->setMinimumSize(s);
+     widget.scrollArea->setMaximumSize(s);
+    //  this->setMaximumSize(s);
+    this->adjustSize();
+
 }
 
 void newForm::setImage(QImage i) {
@@ -241,25 +253,17 @@ void newForm::Sobel() {
     }
 }
 
-void newForm::filtrer(int filtre[3][3]) {
+void newForm::filtrer(int filtre[3][3], int div) {
     int width = img.width();
     int height = img.height();
-    int total = 0;
     QImage dest = img;
     int out;
     int sum[4];
     int I, J;
     QRgb rgb;
 
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            total += filtre[i][j];
-        }
-    }
-    if (total == 0)
-        total++;
-    total = (total);
-    std::cout << total;
+    if (div == 0)
+        div++;
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
             for (int s = 0; s < 4; s++)
@@ -278,16 +282,18 @@ void newForm::filtrer(int filtre[3][3]) {
                     }
                 }
             }
-            //            for (int s = 0; s < 4; s++) {
-            //                if (sum[s] > 255 || sum[s]<-255) {
-            //                    sum[s] = 255;
-            //                }
-            //            }
-            if (total - out == 0) {
-                total++;
+            if (div - out == 0) {
+                out--;
             }
-            dest.setPixel(x, y, qRgba(std::min(abs(sum[0]) / (total - out), 255), std::min(abs(sum[1]) / (total - out), 255), std::min(abs(sum[2]) / (total - out), 255), std::min(abs(sum[3]) / (total - out), 255)));
-
+            for (int s = 0; s < 4; s++) {
+                if ((sum[s] / (div - out)) > 255) {
+                    sum[s] = 255 * (div - out);
+                    //                std::cout << "lol"<<sum[s]<<div - out << std::endl;
+                } else if ((sum[s]) <= 0) {
+                    sum[s] = -sum[s];
+                }
+            }
+            dest.setPixel(x, y, qRgba(((sum[0]) / (div - out)), ((sum[1]) / (div - out)), ((sum[2]) / (div - out)), ((sum[3]) / (div - out))));
         }
     }
     setImage(dest);

@@ -22,7 +22,7 @@ public:
     void greyScale();
     void blur();
     void Sobel();
-    void filtrer(int filtre[3][3]);
+    void filtrer(int filtre[3][3], int div);
 public slots:
     void on_loadButton_clicked();
     void on_cropButton_clicked();

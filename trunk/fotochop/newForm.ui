@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>783</width>
-    <height>658</height>
+    <width>759</width>
+    <height>688</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,6 +21,9 @@
   </property>
   <property name="windowTitle">
    <string>newForm</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
@@ -41,21 +44,21 @@
       </sizepolicy>
      </property>
      <property name="autoFillBackground">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="verticalScrollBarPolicy">
       <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
      <property name="widgetResizable">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <widget class="QWidget" name="scrollAreaWidgetContents">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>778</width>
-        <height>649</height>
+        <width>757</width>
+        <height>686</height>
        </rect>
       </property>
       <property name="sizePolicy">
