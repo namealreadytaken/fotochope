@@ -8,11 +8,14 @@
 #include "newForm.h"
 #include "resize.h"
 #include "Pipette.h"
+#include "Fusion.h"
 #include "filtre.h"
 #include <QtGui>
 #include <iostream>
+#include <QDesktopWidget>
 
 newForm::newForm() {
+
     widget.setupUi(this);
     widget.resultLabel->installEventFilter(this);
     crop = false;
@@ -49,6 +52,19 @@ void newForm::on_blurButton_clicked() {
     blur();
 }
 
+void newForm::on_fusionButton_clicked() {
+
+
+    QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image", "", tr("Images (*.png *.jpg *.gif *.pnm)"));
+    QImage image;
+    if (!fileName.isEmpty()) {
+        image.load(fileName);
+        Fusion* f = new Fusion(img, image);
+        f->showMaximized();
+    }
+
+}
+
 void newForm::on_filtreButton_clicked() {
 
     Filtre* f = new Filtre(this);
@@ -80,6 +96,11 @@ void newForm::setLabelSize(QSize s) {
      widget.scrollArea->setMaximumSize(s);
     //  this->setMaximumSize(s);
     this->adjustSize();
+
+   // QDesktopWidget bureau;
+   // bureau.size();
+    //resize(bureau.size());
+
 
 }
 
@@ -131,13 +152,15 @@ bool newForm::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void newForm::greyScale() {
-    QImage image = img;
+    QImage image = widget.resultLabel->pixmap()->toImage();
     for (int i = 0; i < image.width(); i++) {
         for (int j = 0; j < image.height(); j++) {
             image.setPixel(i, j, pxToGrey(image.pixel(i, j)));
         }
     }
     setImage(image);
+
+    //Sobel();
 }
 
 QRgb newForm::pxToGrey(QRgb px) {

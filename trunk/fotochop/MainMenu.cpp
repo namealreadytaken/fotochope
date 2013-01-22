@@ -25,7 +25,7 @@ void MainMenu::on_actionOuvrir_triggered() {
         image.load(fileName);
         form->setImage(image);
         form->setWindowTitle(fileName);
-        form->show();
+        form->showMaximized();
 
     }
 }

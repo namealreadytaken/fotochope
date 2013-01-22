@@ -40,7 +40,7 @@ void Resize::on_okButton_clicked() {
 
 }
 
-QImage Resize::resizeI(QImage image, int width, int height) {
+QImage resizeI(QImage image, int width, int height) {
     QRgb px;
     double ratiov = double(image.height()) / double(height);
     double ratioh = double(image.width()) / double(width);
