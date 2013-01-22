@@ -33,6 +33,7 @@ public slots:
     void on_blurButton_clicked();
     void on_histoButton_clicked();
     void on_filtreButton_clicked();
+    void on_fusionButton_clicked();
 private:
     Ui::newForm widget;
     QImage img;

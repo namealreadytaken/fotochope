@@ -12,13 +12,16 @@
 #include <QPainter>
 #include <QWidget>
 
+
+QImage resizeI(QImage image, int width, int height);
+
 class Resize : public QDialog {
     Q_OBJECT
 public:
     Resize();
     Resize(newForm* p,QImage im);
     virtual ~Resize();
-    QImage resizeI(QImage image, int width, int height);
+    
 public slots:   
 void on_cancelButton_clicked();
 void on_okButton_clicked();
