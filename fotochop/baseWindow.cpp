@@ -83,7 +83,7 @@ void baseWindow::on_saveButton_clicked() {
 void baseWindow::setLabelSize(QSize s) {
     widget.resultLabel->setMinimumSize(s);
     widget.resultLabel->setMaximumSize(s);
-    this->adjustSize();
+    //this->adjustSize();
 }
 
 void baseWindow::setImage(QImage i) {
@@ -98,7 +98,7 @@ void baseWindow::on_resizeButton_clicked() {
 }
 
 void baseWindow::on_histoButton_clicked() {
-    Histogramme* h = new Histogramme(img);
+    Histogramme* h = new Histogramme(this,img);
     h->show();
 }
 

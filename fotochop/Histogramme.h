@@ -9,11 +9,11 @@
 #define	_HISTOGRAMME_H
 
 #include "ui_Histogramme.h"
-
+#include "baseWindow.h"
 class Histogramme : public QDialog {
     Q_OBJECT
 public:
-    Histogramme(QImage im);
+    Histogramme(baseWindow* p,QImage im);
     virtual ~Histogramme();
 public slots:
     void on_checkR_stateChanged();
@@ -23,6 +23,7 @@ public slots:
     void on_YUVradio_toggled();
     void egalize();
 private:
+    baseWindow* pere;
     Ui::Histogramme widget;
     QGraphicsScene *scene;
     QGraphicsEllipseItem * ell;
