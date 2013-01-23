@@ -7,21 +7,21 @@
 
 #ifndef _Filtre_H
 #define	_Filtre_H
-#include "newForm.h"
+#include "baseWindow.h"
 #include "ui_filtre.h"
 
 class Filtre : public QDialog {
     Q_OBJECT
 public:
     Filtre();
-    Filtre(newForm* p);
+    Filtre(baseWindow* p);
     virtual ~Filtre();
 public slots:
     void on_okButton_clicked();
     void on_presets_activated(int);
 private:
     Ui::filtre widget;
-    newForm* pere;
+    baseWindow* pere;
 };
 
 #endif	/* _Filtre_H */

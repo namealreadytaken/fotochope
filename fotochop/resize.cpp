@@ -15,7 +15,7 @@ Resize::Resize() {
     widget.setupUi(this);
 }
 
-Resize::Resize(newForm* p, QImage im) {
+Resize::Resize(baseWindow* p, QImage im) {
     widget.setupUi(this);
     image = im;
     pere = p;

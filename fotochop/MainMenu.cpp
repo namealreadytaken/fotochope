@@ -6,7 +6,7 @@
  */
 
 #include "MainMenu.h"
-#include "newForm.h"
+#include "baseWindow.h"
 #include <QtGui>
 
 MainMenu::MainMenu() {
@@ -21,7 +21,7 @@ void MainMenu::on_actionOuvrir_triggered() {
     QImage image;
     if (!fileName.isEmpty()) {
 
-        newForm* form = new newForm();
+        baseWindow* form = new baseWindow();
         image.load(fileName);
         form->setImage(image);
         form->setWindowTitle(fileName);

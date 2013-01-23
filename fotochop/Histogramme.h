@@ -19,11 +19,14 @@ public slots:
     void on_checkR_stateChanged();
     void on_checkG_stateChanged();
     void on_checkB_stateChanged();
+    void on_egalizeButton_clicked();
     void on_YUVradio_toggled();
+    void egalize();
 private:
     Ui::Histogramme widget;
     QGraphicsScene *scene;
     QGraphicsEllipseItem * ell;
+    QImage img;
     void histo(QImage im);
     int histR[256];
     int histG[256];
@@ -33,6 +36,7 @@ private:
     int histV[316];
     int maxR, maxG, maxB, maxY, maxU, maxV;
     int baseU,baseV;
+    long nb_pixel;
     void changer_affichage_histo();
 
 };

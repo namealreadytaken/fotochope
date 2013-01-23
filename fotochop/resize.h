@@ -7,7 +7,7 @@
 
 #ifndef _RESIZE_H
 #define	_RESIZE_H
-#include "newForm.h"
+#include "baseWindow.h"
 #include "ui_resize.h"
 #include <QPainter>
 #include <QWidget>
@@ -19,7 +19,7 @@ class Resize : public QDialog {
     Q_OBJECT
 public:
     Resize();
-    Resize(newForm* p,QImage im);
+    Resize(baseWindow* p,QImage im);
     virtual ~Resize();
     
 public slots:   
@@ -28,7 +28,7 @@ void on_okButton_clicked();
 private:
     Ui::resize widget;
     QImage image;
-    newForm* pere;
+    baseWindow* pere;
 };
 
 #endif	/* _RESIZE_H */

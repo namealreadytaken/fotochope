@@ -11,15 +11,18 @@
 #include"ui_Fusion.h"
 #include <QImage>
 #include <QWidget>
+#include "baseWindow.h"
 
 class Fusion : public QDialog {
     Q_OBJECT
 public:
-    Fusion(QImage im, QImage im2);
+    Fusion(baseWindow * p ,QImage im, QImage im2);
     virtual ~Fusion();
 public slots:
     void on_horizontalSlider_valueChanged();
+    void on_okButton_clicked();
 private:
+    baseWindow * pere;
     Ui::Fusion widget;
     QImage img1;
     QImage img2;
