@@ -13,7 +13,7 @@ Filtre::Filtre() {
     widget.setupUi(this);
 }
 
-Filtre::Filtre(newForm* p) {
+Filtre::Filtre(baseWindow* p) {
     widget.setupUi(this);
     this->pere = p;
 }
