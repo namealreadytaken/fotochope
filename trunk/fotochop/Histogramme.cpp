@@ -8,9 +8,10 @@
 #include "Histogramme.h"
 #include <QtGui>
 
-Histogramme::Histogramme(QImage im) {
+Histogramme::Histogramme(baseWindow* p,QImage im) {
     
     img = im;
+    pere = p;
 
     baseU = 112;
     baseV = 158;
@@ -248,6 +249,19 @@ void Histogramme::egalize(){
         if (maxV > histV[i])
             maxV = histV[i];
     }
+    QRgb newPix;
+    int r,g,b;
+    for (int i = 0; i < img.width(); i++) {
+        for (int j = 0; j < img.height(); j++) {
+            newPix = img.pixel(i,j);
+            r = newValR[qRed(newPix)];
+            g = newValG[qGreen(newPix)];
+            b = newValB[qBlue(newPix)];
+            img.setPixel(i,j,qRgb(r,g,b));
+
+        }
+    }
+    pere->setImage(img);
     
     changer_affichage_histo();
 }
