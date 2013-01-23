@@ -10,11 +10,9 @@
 #include <iostream>
 
 QImage image;
-
 Resize::Resize() {
     widget.setupUi(this);
 }
-
 Resize::Resize(baseWindow* p, QImage im) {
     widget.setupUi(this);
     image = im;
@@ -24,19 +22,13 @@ Resize::Resize(baseWindow* p, QImage im) {
 Resize::~Resize() {
 }
 
-void Resize::on_cancelButton_clicked() {
+void Resize::on_cancelButton_clicked(){
     this->close();
 }
-
-void Resize::on_okButton_clicked() {
-    bool a = false;
-    bool b = false;
-    widget.height->text().toInt(&a);
-    widget.width->text().toInt(&b);
-    if (a && b) {
-        pere->setImage(resizeI(image, widget.width->text().toInt(), widget.height->text().toInt()));
-        this->close();
-    }
+void Resize::on_okButton_clicked(){
+    
+    pere->setImage(resizeI(image,widget.height->text().toInt(),widget.height->text().toInt()));
+    this->close();
 
 }
 
