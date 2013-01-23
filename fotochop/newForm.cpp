@@ -59,7 +59,7 @@ void newForm::on_fusionButton_clicked() {
     QImage image;
     if (!fileName.isEmpty()) {
         image.load(fileName);
-        Fusion* f = new Fusion(img, image);
+        Fusion* f = new Fusion(this,img, image);
         f->showMaximized();
     }
 
