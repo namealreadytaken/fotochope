@@ -17,6 +17,7 @@ public:
     virtual ~baseWindow();
     void setLabelSize(QSize s);
     void setImage(QImage i);
+    void setPixmap(QImage i);
     void greyScale();
     void blur();
     void Sobel();
@@ -32,12 +33,17 @@ public slots:
     void on_histoButton_clicked();
     void on_filtreButton_clicked();
     void on_fusionButton_clicked();
+    void on_selectButton_clicked();
 private:
     Ui::MainWindow widget;
     QImage img;
-    bool crop;
+    bool selectSet;
+    bool selectZone;
     bool pipette;
     QPoint pstart;
+    QPoint pend;
+    QPoint pdragstart;
+    QPoint pdragend;
     bool eventFilter(QObject* watched, QEvent* event);
     QRgb pxToGrey(QRgb px);
 

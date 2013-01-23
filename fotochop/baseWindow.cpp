@@ -19,8 +19,9 @@ baseWindow::baseWindow() {
 
     widget.setupUi(this);
     widget.resultLabel->installEventFilter(this);
-    crop = false;
     pipette = false;
+    selectZone = false;
+    selectSet = false;
 }
 
 baseWindow::~baseWindow() {
@@ -38,7 +39,19 @@ void baseWindow::on_loadButton_clicked() {
 }
 
 void baseWindow::on_cropButton_clicked() {
-    crop = true;
+    QImage image = img;
+    QImage* cropped = new QImage(abs(pstart.x() - pend.x()), abs(pstart.y() - pend.y()), QImage::Format_ARGB32_Premultiplied);
+    for (int i = std::min(pstart.x(), pend.x()); i < std::max(pstart.x(), pend.x()); i++) {
+        for (int j = std::min(pstart.y(), pend.y()); j < std::max(pstart.y(), pend.y()); j++) {
+            cropped->setPixel(i - std::min(pstart.x(), pend.x()), j - std::min(pstart.y(), pend.y()), image.pixel(i, j));
+        }
+    }
+    selectSet = false;
+    setImage(*cropped);
+}
+
+void baseWindow::on_selectButton_clicked() {
+    selectZone = true;
 }
 
 void baseWindow::on_pipetteButton_clicked() {
@@ -92,13 +105,18 @@ void baseWindow::setImage(QImage i) {
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
 }
 
+void baseWindow::setPixmap(QImage i) {
+    setLabelSize(i.size());
+    widget.resultLabel->setPixmap(QPixmap::fromImage(i));
+}
+
 void baseWindow::on_resizeButton_clicked() {
     Resize* r = new Resize(this, img);
     r->show();
 }
 
 void baseWindow::on_histoButton_clicked() {
-    Histogramme* h = new Histogramme(this,img);
+    Histogramme* h = new Histogramme(this, img);
     h->show();
 }
 
@@ -110,26 +128,57 @@ bool baseWindow::eventFilter(QObject* watched, QEvent* event) {
     const QMouseEvent * const me = static_cast<const QMouseEvent*> (event);
     QPoint p = me->globalPos();
     p = widget.resultLabel->mapFromGlobal(p);
-    if (crop) {
-        if (event->type() == QEvent::MouseButtonPress) {
-            pstart = p;
-        } else if (event->type() == QEvent::MouseButtonRelease) {
-            QImage image = img;
-            QImage* cropped = new QImage(abs(pstart.x() - p.x()), abs(pstart.y() - p.y()), QImage::Format_ARGB32_Premultiplied);
-            for (int i = std::min(pstart.x(), p.x()); i < std::max(pstart.x(), p.x()); i++) {
-                for (int j = std::min(pstart.y(), p.y()); j < std::max(pstart.y(), p.y()); j++) {
-                    cropped->setPixel(i - std::min(pstart.x(), p.x()), j - std::min(pstart.y(), p.y()), image.pixel(i, j));
-                }
-            }
-            setImage(*cropped);
-            crop = false;
-        }
-    } else if (pipette) {
+    if (pipette) {
         QRgb px = img.pixel(p.x(), p.y());
         Pipette* pi = new Pipette(qRed(px), qGreen(px), qBlue(px));
         pi->show();
         pipette = false;
+    } else if (selectZone) {
+        if (selectSet) {
+            if (event->type() == QEvent::MouseButtonPress) {
+                if (p.x() >= std::min(pstart.x(), pend.x()) && p.x() <= std::max(pstart.x(), pend.x()) && p.y() >= std::min(pstart.y(), pend.y()) && p.y() <= std::max(pstart.y(), pend.y())) {
+                    pdragstart = p;
+                } else {
+                    setImage(img);
+                    selectZone = false;
+                }
+            } else if (event->type() == QEvent::MouseButtonRelease) {
+                pdragend = p;
+                QImage image = img;
+                pstart.setX(pstart.x() + pdragend.x() - pdragstart.x());
+                pstart.setY(pstart.y() + pdragend.y() - pdragstart.y());
+                pend.setX(pend.x() + pdragend.x() - pdragstart.x());
+                pend.setY(pend.y() + pdragend.y() - pdragstart.y());
+                for (int i = std::min(pstart.x(), pend.x()); i <= std::max(pstart.x(), pend.x()); i++) {
+                    for (int j = std::min(pstart.y(), pend.y()); j <= std::max(pstart.y(), pend.y()); j++) {
+                        if (i == pend.x() || i == pstart.x() || j == pend.y() || j == pstart.y()) {
+                            image.setPixel(i, j, qRgb(0, 0, 0));
+                        }
+                    }
+                }
+                setPixmap(image);
+
+            }
+        } else {
+            if (event->type() == QEvent::MouseButtonPress) {
+                pstart = p;
+            } else if (event->type() == QEvent::MouseButtonRelease) {
+                pend = p;
+                QImage image = img;
+                for (int i = std::min(pstart.x(), pend.x()); i <= std::max(pstart.x(), pend.x()); i++) {
+                    for (int j = std::min(pstart.y(), pend.y()); j <= std::max(pstart.y(), pend.y()); j++) {
+                        if (i == pend.x() || i == pstart.x() || j == pend.y() || j == pstart.y()) {
+                            image.setPixel(i, j, qRgb(0, 0, 0));
+                        }
+                    }
+                }
+                setPixmap(image);
+                selectSet = true;
+            }
+
+        }
     }
+
     return false;
 }
 

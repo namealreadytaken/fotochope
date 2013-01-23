@@ -8,8 +8,8 @@
 #include "Histogramme.h"
 #include <QtGui>
 
-Histogramme::Histogramme(baseWindow* p,QImage im) {
-    
+Histogramme::Histogramme(baseWindow* p, QImage im) {
+
     img = im;
     pere = p;
 
@@ -33,7 +33,7 @@ Histogramme::Histogramme(baseWindow* p,QImage im) {
         histU[i] = 0;
         histV[i] = 0;
     }
-    
+
     nb_pixel = im.width() * im.height();
 
     for (int i = 0; i < im.width(); i++) {
@@ -151,7 +151,7 @@ void Histogramme::changer_affichage_histo() {
     }
 }
 
-void Histogramme::on_egalizeButton_clicked(){
+void Histogramme::on_egalizeButton_clicked() {
     egalize();
 }
 
@@ -179,61 +179,61 @@ void Histogramme::on_YUVradio_toggled() {
     }
 }
 
-void Histogramme::egalize(){
-    
+void Histogramme::egalize() {
+
     int histRcummul[256];
     int histGcummul[256];
     int histBcummul[256];
-    
-    for (int i = 0; i < 256; i++){
+
+    for (int i = 0; i < 256; i++) {
         histRcummul[i] = 0;
         histGcummul[i] = 0;
         histBcummul[i] = 0;
-      }
-    
+    }
+
     histRcummul[0] = histR[0];
     histGcummul[0] = histG[0];
     histBcummul[0] = histB[0];
-    
-    for (int i = 1; i < 256; i++){
-        histRcummul[i] = histR[i] + histRcummul[i-1] ;
-        histGcummul[i] = histG[i] + histGcummul[i-1] ;
-        histBcummul[i] = histB[i] + histBcummul[i-1] ;
+
+    for (int i = 1; i < 256; i++) {
+        histRcummul[i] = histR[i] + histRcummul[i - 1];
+        histGcummul[i] = histG[i] + histGcummul[i - 1];
+        histBcummul[i] = histB[i] + histBcummul[i - 1];
     }
-    
+
     int newValR[256];
     int newValG[256];
     int newValB[256];
-    
-    for (int i = 0; i < 256; i++){
-        newValR[i] = -(255*histRcummul[i])/nb_pixel;
-        newValG[i] = -(255*histGcummul[i])/nb_pixel;
-        newValB[i] = -(255*histBcummul[i])/nb_pixel;
+
+    for (int i = 0; i < 256; i++) {
+        newValR[i] = -(255 * histRcummul[i]) / nb_pixel;
+        newValG[i] = -(255 * histGcummul[i]) / nb_pixel;
+        newValB[i] = -(255 * histBcummul[i]) / nb_pixel;
     }
-    
+
     int histRtmp[256];
     int histGtmp[256];
     int histBtmp[256];
-    
-    for (int i = 0; i < 256; i++){
+
+    for (int i = 0; i < 256; i++) {
         histRtmp[i] = histR[i];
-        histR[i]=0;
+        histR[i] = 0;
         histGtmp[i] = histG[i];
         histG[i] = 0;
         histBtmp[i] = histB[i];
-        histB[i]= 0;
-      }
-    
-    for (int i = 0; i < 256; i++){
-        histR[newValR[i]]= histR[i] + histRtmp[newValR[i]];
-        histG[newValG[i]]= histG[i] + histGtmp[newValG[i]];
-        histB[newValB[i]]= histB[i] + histBtmp[newValB[i]];
+        histB[i] = 0;
     }
-    
+
+    for (int i = 0; i < 256; i++) {
+        histR[newValR[i]] = histR[i] + histRtmp[newValR[i]];
+        histG[newValG[i]] = histG[i] + histGtmp[newValG[i]];
+        histB[newValB[i]] = histB[i] + histBtmp[newValB[i]];
+    }
+
     maxY = 0;
     maxU = 0;
     maxV = 0;
-    
+
     for (int i = 0; i < 256; ++i) {
         if (maxR > histR[i])
             maxR = histR[i];
@@ -250,19 +250,19 @@ void Histogramme::egalize(){
             maxV = histV[i];
     }
     QRgb newPix;
-    int r,g,b;
+    int r, g, b;
     for (int i = 0; i < img.width(); i++) {
         for (int j = 0; j < img.height(); j++) {
-            newPix = img.pixel(i,j);
+            newPix = img.pixel(i, j);
             r = newValR[qRed(newPix)];
             g = newValG[qGreen(newPix)];
             b = newValB[qBlue(newPix)];
-            img.setPixel(i,j,qRgb(r,g,b));
+            img.setPixel(i, j, qRgb(r, g, b));
 
         }
     }
     pere->setImage(img);
-    
+
     changer_affichage_histo();
 }
 
