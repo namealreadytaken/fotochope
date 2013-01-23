@@ -140,7 +140,7 @@ bool baseWindow::eventFilter(QObject* watched, QEvent* event) {
                     pdragstart = p;
                 } else {
                     setImage(img);
-                    selectZone = false;
+                    selectZone = !selectZone;
                 }
             } else if (event->type() == QEvent::MouseButtonRelease) {
                 pdragend = p;
