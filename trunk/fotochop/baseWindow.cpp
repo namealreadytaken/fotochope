@@ -340,11 +340,12 @@ void baseWindow::filtrer(int filtre[3][3], int div) {
                 out--;
             }
             for (int s = 0; s < 4; s++) {
+                if ((sum[s]) <= 0) {
+                    sum[s] = -sum[s];
+                }
                 if ((sum[s] / (div - out)) > 255) {
                     sum[s] = 255 * (div - out);
                     //                std::cout << "lol"<<sum[s]<<div - out << std::endl;
-                } else if ((sum[s]) <= 0) {
-                    sum[s] = -sum[s];
                 }
             }
             dest.setPixel(x, y, qRgba(((sum[0]) / (div - out)), ((sum[1]) / (div - out)), ((sum[2]) / (div - out)), ((sum[3]) / (div - out))));
@@ -353,4 +354,14 @@ void baseWindow::filtrer(int filtre[3][3], int div) {
     setImage(dest);
 }
 
-
+void baseWindow::invert() {
+    QImage dest = img;
+    QRgb rgb;
+    for (int i = 0; i < img.width(); i++) {
+        for (int j = 0; j < img.height(); j++) {
+            rgb = img.pixel(i, j);
+            dest.setPixel(i, j, qRgba(255 - qRed(rgb), 255 - qGreen(rgb), 255 - qBlue(rgb), 255 - qAlpha(rgb)));
+        }
+    }
+    setImage(dest);
+}

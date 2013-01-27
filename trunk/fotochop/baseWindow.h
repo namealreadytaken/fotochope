@@ -20,6 +20,7 @@ public:
     void setPixmap(QImage i);
     void greyScale();
     void blur();
+    void invert();
     void Sobel();
     void filtrer(int filtre[3][3], int div);
 public slots:
