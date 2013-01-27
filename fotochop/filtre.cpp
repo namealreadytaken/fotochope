@@ -67,26 +67,26 @@ void Filtre::on_presets_activated(int i) {
         widget.l9->setText("0");
         widget.diviseur->setText("1");
     } else if (i == 1) {
-        widget.l1->setText("0");
-        widget.l2->setText("0");
-        widget.l3->setText("0");
-        widget.l4->setText("0");
-        widget.l5->setText("1");
-        widget.l6->setText("0");
-        widget.l7->setText("0");
-        widget.l8->setText("0");
-        widget.l9->setText("0");
-        widget.diviseur->setText("-1");
-    } else if (i == 2) {
-        widget.l1->setText("0");
+        widget.l1->setText("-2");
         widget.l2->setText("-1");
         widget.l3->setText("0");
         widget.l4->setText("-1");
-        widget.l5->setText("9");
-        widget.l6->setText("-1");
+        widget.l5->setText("3");
+        widget.l6->setText("1");
         widget.l7->setText("0");
+        widget.l8->setText("1");
+        widget.l9->setText("2");
+        widget.diviseur->setText("3");
+    } else if (i == 2) {
+        widget.l1->setText("-1");
+        widget.l2->setText("-1");
+        widget.l3->setText("-1");
+        widget.l4->setText("-1");
+        widget.l5->setText("13");
+        widget.l6->setText("-1");
+        widget.l7->setText("-1");
         widget.l8->setText("-1");
-        widget.l9->setText("0");
+        widget.l9->setText("-1");
         widget.diviseur->setText("5");
     } else if (i == 3) {
         widget.l1->setEnabled(false);
