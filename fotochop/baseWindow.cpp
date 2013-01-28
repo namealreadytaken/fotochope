@@ -14,6 +14,8 @@
 #include <QtGui>
 #include <iostream>
 #include <QDesktopWidget>
+#include <algorithm>
+#include <vector> 
 
 baseWindow::baseWindow() {
 
@@ -39,15 +41,18 @@ void baseWindow::on_loadButton_clicked() {
 }
 
 void baseWindow::on_cropButton_clicked() {
-    QImage image = img;
-    QImage* cropped = new QImage(abs(pstart.x() - pend.x()), abs(pstart.y() - pend.y()), QImage::Format_ARGB32_Premultiplied);
-    for (int i = std::min(pstart.x(), pend.x()); i < std::max(pstart.x(), pend.x()); i++) {
-        for (int j = std::min(pstart.y(), pend.y()); j < std::max(pstart.y(), pend.y()); j++) {
-            cropped->setPixel(i - std::min(pstart.x(), pend.x()), j - std::min(pstart.y(), pend.y()), image.pixel(i, j));
+    if (pstart != pend) {
+        QImage image = img;
+        QImage* cropped = new QImage(abs(pstart.x() - pend.x()), abs(pstart.y() - pend.y()), QImage::Format_ARGB32_Premultiplied);
+        for (int i = std::min(pstart.x(), pend.x()); i < std::max(pstart.x(), pend.x()); i++) {
+            for (int j = std::min(pstart.y(), pend.y()); j < std::max(pstart.y(), pend.y()); j++) {
+                cropped->setPixel(i - std::min(pstart.x(), pend.x()), j - std::min(pstart.y(), pend.y()), image.pixel(i, j));
+            }
         }
+        selectSet = false;
+        pstart = pend;
+        setImage(*cropped);
     }
-    selectSet = false;
-    setImage(*cropped);
 }
 
 void baseWindow::on_selectButton_clicked() {
@@ -140,7 +145,9 @@ bool baseWindow::eventFilter(QObject* watched, QEvent* event) {
                     pdragstart = p;
                 } else {
                     setImage(img);
-                    selectZone = !selectZone;
+                    selectZone = false;
+                    selectSet = false;
+                    pstart = pend;
                 }
             } else if (event->type() == QEvent::MouseButtonRelease) {
                 pdragend = p;
@@ -247,7 +254,7 @@ void baseWindow::blur() {
     setImage(dest);
 }
 
-void baseWindow::Sobel() {
+QImage baseWindow::Sobel() {
     int GX[3][3];
     int GY[3][3];
     /* 3x3 GX Sobel mask.  Ref: www.cee.hw.ac.uk/hipr/html/sobel.html */
@@ -296,15 +303,16 @@ void baseWindow::Sobel() {
                         sumY = sumY + ((qRed(rawColour) + qGreen(rawColour) + qBlue(rawColour)) / 3) * GY[I + 1][J + 1];
                     }
                 }
-                SUM = abs(sumX) + abs(sumY); /*---GRADIENT MAGNITUDE APPROXIMATION (Myler p.218)----*/
-                if (SUM > 255)
+                SUM = abs(sumX) + abs(sumY);
+                if (SUM > 255) {
                     SUM = 255;
-
+                }
             }
             sobelDestination.setPixel(x, y, qRgb(SUM, SUM, SUM));
         }
-        setImage(sobelDestination);
     }
+    //    setImage(sobelDestination);
+    return sobelDestination;
 }
 
 void baseWindow::filtrer(int filtre[3][3], int div) {
@@ -345,7 +353,6 @@ void baseWindow::filtrer(int filtre[3][3], int div) {
                 }
                 if ((sum[s] / (div - out)) > 255) {
                     sum[s] = 255 * (div - out);
-                    //                std::cout << "lol"<<sum[s]<<div - out << std::endl;
                 }
             }
             dest.setPixel(x, y, qRgba(((sum[0]) / (div - out)), ((sum[1]) / (div - out)), ((sum[2]) / (div - out)), ((sum[3]) / (div - out))));
@@ -364,4 +371,106 @@ void baseWindow::invert() {
         }
     }
     setImage(dest);
+}
+
+void baseWindow::contentAware(int width, int height) {
+
+    QImage image = Sobel();
+    QImage* temp = new QImage(img.width(), height, QImage::Format_ARGB32_Premultiplied);
+    QImage* dest = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    double ratiov = double(img.height()) / double(height);
+    double ratioh = double(img.width()) / double(width);
+    bool todelete = false;
+    int diffh = img.height() - height;
+    int diffw = img.width() - width;
+    int nbdeleted = 0;
+    int l[image.width()][2]; //0= pos du px, 1= somme de la colonne
+    int h[image.height()][2];
+    //calcul de la somme
+    for (int i = 0; i < image.height(); i++) {
+        h[i][0] = i;
+        h[i][1] = 0;
+    }
+    for (int i = 0; i < image.width(); i++) {
+        l[i][0] = i;
+        l[i][1] = 0;
+        for (int j = 0; j < image.height(); j++) {
+            l[i][1] += qRed(image.pixel(i, j))-5;
+            h[j][1] += qRed(image.pixel(i, j))-5;
+        }
+    }
+    std::qsort(l, img.width(), sizeof (int[2]), &sortpx);
+    std::qsort(h, img.width(), sizeof (int[2]), &sortpx);
+
+    int k;
+    if (ratiov > 1) {// on fait la diminution verticale
+        for (int j = 0; j < img.height(); j++) {
+            todelete = false;
+            k = 0;
+            while (k < diffh && !todelete) {
+                if (h[k][0] == j) {
+                    todelete = true;
+                    nbdeleted++;
+                }
+                k++;
+            }
+            if (!todelete) {
+                for (int i = 0; i < img.width(); i++) {
+                    temp->setPixel(i, j - nbdeleted, img.pixel(i, j));
+                }
+            }
+        }
+    }
+    //        else {
+    //        for (int i = 0; i < image.width(); i++) {
+    //            for (int j = 0; j < image.height(); j++) {
+    //
+    //                for (int k = j * ((double) 1 / ratiov); k <= j * ((double) 1 / ratiov) + ((double) 1 / ratiov); k++) {
+    //
+    //                }
+    //            }
+    //        }
+    //    }
+    //
+    if (ratioh > 1) {// on fait la diminution horizontale
+        nbdeleted = 0;
+        for (int i = 0; i < image.width(); i++) {
+            todelete = false;
+            k = 0;
+            while (k < diffw && !todelete) {
+                if (l[k][0] == i) {
+                    todelete = true;
+                    nbdeleted++;
+                }
+                k++;
+            }
+            if (!todelete) {
+                for (int j = 0; j < height; j++) {
+                    dest->setPixel(i - nbdeleted, j, temp->pixel(i, j));
+                }
+            }
+        }
+    }
+    //        else {
+    //        for (int i = 0; i < image3->width(); i++) {
+    //            for (int j = 0; j < image3->height(); j++) {
+    //                px = image3->pixel(i, j);
+    //                for (int k = i * ((double) 1 / ratioh); k <= i * ((double) 1 / ratioh) +((double) 1 / ratioh); k++) {
+    //                    image2->setPixel(k, j, px);
+    //                }
+    //            }
+    //        }
+    //    }
+
+    setImage(*dest);
+
+
+}
+
+int sortpx(const void* x, const void* y) {
+    int* a = (int*) x;
+    int* b = (int*) y;
+    if (a[1] == b[1])
+        return 0;
+    return a[1] > b[1] ? +1 : -1;
 }

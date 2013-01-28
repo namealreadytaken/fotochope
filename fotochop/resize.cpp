@@ -10,9 +10,11 @@
 #include <iostream>
 
 QImage image;
+
 Resize::Resize() {
     widget.setupUi(this);
 }
+
 Resize::Resize(baseWindow* p, QImage im) {
     widget.setupUi(this);
     image = im;
@@ -22,12 +24,16 @@ Resize::Resize(baseWindow* p, QImage im) {
 Resize::~Resize() {
 }
 
-void Resize::on_cancelButton_clicked(){
+void Resize::on_cancelButton_clicked() {
     this->close();
 }
-void Resize::on_okButton_clicked(){
-    
-    pere->setImage(resizeI(image,widget.height->text().toInt(),widget.height->text().toInt()));
+
+void Resize::on_okButton_clicked() {
+    if (widget.contentAware->isChecked()) {
+         pere->contentAware(widget.width->text().toInt(), widget.height->text().toInt());
+    } else {
+        pere->setImage(resizeI(image, widget.width->text().toInt(), widget.height->text().toInt()));
+    }
     this->close();
 
 }
@@ -36,7 +42,6 @@ QImage resizeI(QImage image, int width, int height) {
     QRgb px;
     double ratiov = double(image.height()) / double(height);
     double ratioh = double(image.width()) / double(width);
-    std::cout << ratiov << ratioh << std::endl;
     QImage* image2 = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     QImage* image3 = new QImage(image.width(), height, QImage::Format_ARGB32_Premultiplied);
     if (ratiov > 1) {// on fait la diminution verticale
