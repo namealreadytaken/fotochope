@@ -88,6 +88,19 @@
     <string>Annuler</string>
    </property>
   </widget>
+  <widget class="QCheckBox" name="contentAware">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>100</y>
+     <width>111</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Content-Aware</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

@@ -21,7 +21,8 @@ public:
     void greyScale();
     void blur();
     void invert();
-    void Sobel();
+    QImage Sobel();
+    void contentAware(int width, int height);
     void filtrer(int filtre[3][3], int div);
 public slots:
     void on_loadButton_clicked();
@@ -49,6 +50,6 @@ private:
     QRgb pxToGrey(QRgb px);
 
 };
-
+int sortpx(const void* x, const void* y);
 #endif	/* _BASEWINDOW_H */
 
