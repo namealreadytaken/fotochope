@@ -153,7 +153,6 @@ void baseWindow::setImage(QImage i) {
     setLabelSize(i.size());
     img = i;
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
-        std::cout << "min : " << min << " max : " << max << " courant : " << actHist << std::endl;
 }
 void baseWindow::on_actionQuitter_triggered(){
     this->close();
@@ -168,7 +167,6 @@ void baseWindow::on_actionAnnuler_triggered() {
         setLabelSize(img.size());
         widget.resultLabel->setPixmap(QPixmap::fromImage(img));
     }
-    std::cout << "min : " << min << " max : " << max << " courant : " << actHist << std::endl;
     
             /*
                 Element* eT = liste;
@@ -210,7 +208,6 @@ void baseWindow::on_actionRefaire_triggered() {
         setLabelSize(img.size());
         widget.resultLabel->setPixmap(QPixmap::fromImage(img));
     }
-        std::cout << "min : " << min << " max : " << max << " courant : " << actHist << std::endl;
 }
 
 bool baseWindow::eventFilter(QObject* watched, QEvent* event) {
@@ -342,7 +339,7 @@ void baseWindow::blur() {
     setImage(dest);
 }
 
-QImage baseWindow::Sobel() {
+QImage baseWindow::Sobel(QImage source) {
     int GX[3][3];
     int GY[3][3];
     /* 3x3 GX Sobel mask.  Ref: www.cee.hw.ac.uk/hipr/html/sobel.html */
@@ -367,7 +364,6 @@ QImage baseWindow::Sobel() {
     GY[2][1] = -2;
     GY[2][2] = -1;
 
-    QImage source = img;
     QImage sobelDestination = source;
     int width = source.width();
     int height = source.height();
@@ -463,7 +459,7 @@ void baseWindow::on_negButton_clicked() {
 
 void baseWindow::contentAware(int width, int height) {
 
-    QImage image = Sobel();
+    QImage image = Sobel(img);
     QImage* temp = new QImage(img.width(), height, QImage::Format_ARGB32_Premultiplied);
     QImage* dest = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     double ratiov = double(img.height()) / double(height);
@@ -472,35 +468,44 @@ void baseWindow::contentAware(int width, int height) {
     int diffh = img.height() - height;
     int diffw = img.width() - width;
     int nbdeleted = 0;
-    int l[image.width()][2]; //0= pos du px, 1= somme de la colonne
-    int h[image.height()][2];
+    int w[image.width()][2], w2[image.width()][2]; //0= pos du px, 1= somme de la colonne
+    int h[image.height()][2], h2[image.height()][2];
+    int rgb;
+    int wmaxval, hmaxval;
     //calcul de la somme
     for (int i = 0; i < image.height(); i++) {
         h[i][0] = i;
+        h2[i][0] = i;
         h[i][1] = 0;
+        h2[i][1] = 0;
     }
     for (int i = 0; i < image.width(); i++) {
-        l[i][0] = i;
-        l[i][1] = 0;
+        w[i][0] = i;
+        w[i][1] = 0;
+        w2[i][0] = i;
+        w2[i][1] = 0;
         for (int j = 0; j < image.height(); j++) {
-            l[i][1] += qRed(image.pixel(i, j)) - 5;
-            h[j][1] += qRed(image.pixel(i, j)) - 5;
+            rgb = qRed(image.pixel(i, j));
+            w[i][1] += rgb - 10;
+            h[j][1] += rgb - 10;
+            w2[i][1] += rgb - 10;
+            h2[j][1] += rgb - 10;
         }
     }
-    std::qsort(l, img.width(), sizeof (int[2]), &sortpx);
-    std::qsort(h, img.width(), sizeof (int[2]), &sortpx);
 
-    int k;
+    std::qsort(w2, image.width(), sizeof (int[2]), &sortpx);
+    std::qsort(h2, image.height(), sizeof (int[2]), &sortpx);
+    wmaxval = w2[diffw][1];
+    hmaxval = h2[diffh][1];
+
+
+
     if (ratiov > 1) {// on fait la diminution verticale
         for (int j = 0; j < img.height(); j++) {
             todelete = false;
-            k = 0;
-            while (k < diffh && !todelete) {
-                if (h[k][0] == j) {
-                    todelete = true;
-                    nbdeleted++;
-                }
-                k++;
+            if (h[j][1] <= hmaxval && nbdeleted < diffh) {
+                todelete = true;
+                nbdeleted++;
             }
             if (!todelete) {
                 for (int i = 0; i < img.width(); i++) {
@@ -524,13 +529,9 @@ void baseWindow::contentAware(int width, int height) {
         nbdeleted = 0;
         for (int i = 0; i < image.width(); i++) {
             todelete = false;
-            k = 0;
-            while (k < diffw && !todelete) {
-                if (l[k][0] == i) {
-                    todelete = true;
-                    nbdeleted++;
-                }
-                k++;
+            if (w[i][1] <= wmaxval && nbdeleted < diffw) {
+                todelete = true;
+                nbdeleted++;
             }
             if (!todelete) {
                 for (int j = 0; j < height; j++) {
