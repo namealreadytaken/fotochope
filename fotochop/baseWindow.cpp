@@ -153,7 +153,8 @@ void baseWindow::setImage(QImage i) {
     img = i;
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
 }
-void baseWindow::on_actionQuitter_triggered(){
+
+void baseWindow::on_actionQuitter_triggered() {
     this->close();
 }
 
@@ -161,27 +162,27 @@ void baseWindow::on_actionAnnuler_triggered() {
     if (actHist != min) {
         actHist = (actHist - 1) % MAXHIST;
         if (actHist == -1)
-            actHist = MAXHIST-1;
+            actHist = MAXHIST - 1;
         img = hist[actHist];
         setLabelSize(img.size());
         widget.resultLabel->setPixmap(QPixmap::fromImage(img));
     }
-    
-            /*
-                Element* eT = liste;
-                if (liste != NULL) {
-                    if (liste->suivant != NULL) {
-                        // while (eT->suivant->suivant != NULL) {
-                        while (eT->suivant != histAct) {
-                            eT = eT->suivant;
-                        }
-                        img = eT->valeur;
-                        // eT->suivant = NULL;
-                        setLabelSize(img.size());
-                        widget.resultLabel->setPixmap(QPixmap::fromImage(img));
-                    }
+
+    /*
+        Element* eT = liste;
+        if (liste != NULL) {
+            if (liste->suivant != NULL) {
+                // while (eT->suivant->suivant != NULL) {
+                while (eT->suivant != histAct) {
+                    eT = eT->suivant;
                 }
-             */
+                img = eT->valeur;
+                // eT->suivant = NULL;
+                setLabelSize(img.size());
+                widget.resultLabel->setPixmap(QPixmap::fromImage(img));
+            }
+        }
+     */
 }
 
 void baseWindow::setPixmap(QImage i) {
@@ -464,8 +465,8 @@ void baseWindow::contentAware(int width, int height) {
     double ratiov = double(img.height()) / double(height);
     double ratioh = double(img.width()) / double(width);
     bool todelete = false;
-    int diffh = img.height() - height;
-    int diffw = img.width() - width;
+    int diffh = std::abs(img.height() - height);
+    int diffw = std::abs(img.width() - width);
     int nbdeleted = 0;
     int w[image.width()][2], w2[image.width()][2]; //0= pos du px, 1= somme de la colonne
     int h[image.height()][2], h2[image.height()][2];
