@@ -9,8 +9,8 @@
 #include "baseWindow.h"
 #include <QtGui>
 
-Histogramme::Histogramme(baseWindow* p,QImage im) {
-    
+Histogramme::Histogramme(baseWindow* p, QImage im) {
+
     img = im;
     pere = p;
 
@@ -34,7 +34,7 @@ Histogramme::Histogramme(baseWindow* p,QImage im) {
         histU[i] = 0;
         histV[i] = 0;
     }
-    
+
     nb_pixel = im.width() * im.height();
 
     for (int i = 0; i < im.width(); i++) {
@@ -72,15 +72,7 @@ Histogramme::Histogramme(baseWindow* p,QImage im) {
             maxV = histV[i];
     }
 
-    std::cout << "Max R" << maxR;
-    std::cout << "Max G" << maxG;
-    std::cout << "Max B" << maxV;
-
-
     widget.setupUi(this);
-
-
-
 }
 
 Histogramme::~Histogramme() {
@@ -152,8 +144,12 @@ void Histogramme::changer_affichage_histo() {
     }
 }
 
-void Histogramme::on_egalizeButton_clicked(){
+void Histogramme::on_egalizeButton_clicked() {
     egalize();
+}
+
+void Histogramme::on_spreadButton_clicked() {
+    spread();
 }
 
 void Histogramme::on_YUVradio_toggled() {
@@ -180,133 +176,172 @@ void Histogramme::on_YUVradio_toggled() {
     }
 }
 
+void Histogramme::egalize() {
 
-void Histogramme::egalize(){
-    
     int hist[256];
-    
-    for (int i = 0; i <256 ; i++){
+
+    for (int i = 0; i < 256; i++) {
         hist[i] = 0;
     }
-    
+
     for (int i = 0; i < img.width(); i++) {
         for (int j = 0; j < img.height(); j++) {
-            QColor p = img.pixel(i,j);
+            QColor p = img.pixel(i, j);
             hist[p.toHsv().value()]++;
         }
     }
-    
-    for (int i = 1; i <256 ; i++){
-        hist[i] = (hist[i]+hist[i-1]);
+
+    for (int i = 1; i < 256; i++) {
+        hist[i] = (hist[i] + hist[i - 1]);
     }
-    
-    for (int i = 0; i <256 ; i++){
-        hist[i] = 255*hist[i]/nb_pixel;
+
+    for (int i = 0; i < 256; i++) {
+        hist[i] = 255 * hist[i] / nb_pixel;
     }
-    
-    int h,s,v;
+
+    int h, s, v;
     QColor* c;
     for (int i = 0; i < img.width(); i++) {
         for (int j = 0; j < img.height(); j++) {
             c = new QColor(img.pixel(i, j));
-            h= c->hue();
-            s= c->saturation();
-            v= hist[c->value()];
-            c->setHsv(h,s,v);
+            h = c->hue();
+            s = c->saturation();
+            v = hist[c->value()];
+            c->setHsv(h, s, v);
+            img.setPixel(i, j, c->rgb());
+        }
+    }
+    pere->setImage(img);
+
+    changer_affichage_histo();
+}
+
+/*void Histogramme::spread(){
+    int minR=0,minG=0,minB=0;
+    int maxR=255,maxG=255,maxB=255;
+    while (histR[minR] == 0 && minR<256 ){
+        minR++;
+    }
+    while (histG[minG] == 0 && minG<256){
+        minG++;
+    }
+    while (histB[minB] == 0 && minB<256){
+        minB++;
+    }
+    while (histR[maxR] == 0 && maxR>=0){
+        maxR--;
+    }
+    while (histG[maxG] == 0 && maxG>=0){
+        maxG--;
+    }
+    while (histB[maxB] == 0 && maxB>=0){
+        maxR--;
+    }
+    int penteR,penteG,penteB;
+    penteR= 255/(maxR-minR);
+    penteG= 255/(maxG-minG);
+    penteB= 255/(maxB-minB);
+    
+    int oaoR,oaoG,oaoB;
+    oaoR = -penteR*minR;
+    oaoG = -penteG*minG;
+    oaoB = -penteB*minB;
+    
+    int newValR[256],newValG[256],newValB[256];
+    
+    for (int i = 0; i<256;i++){
+        newValR[i]=std::min(255,std::max(0,penteR*i+oaoR));
+        newValG[i]=std::min(255,std::max(0,penteG*i+oaoG));
+        newValB[i]=std::min(255,std::max(0,penteB*i+oaoB));
+    }
+    
+    int r,g,b;
+    QColor* c;
+    for (int i = 0; i < img.width(); i++) {
+        for (int j = 0; j < img.height(); j++) {
+            c = new QColor(img.pixel(i, j));
+            r= newValR[c->red()];
+            g= newValG[c->green()];
+            b= newValB[c->blue()];
+            c->setRgb(r,g,b);
             img.setPixel(i,j,c->rgb());
         }
     }
     pere->setImage(img);
     
     changer_affichage_histo();
-}
+}*/
 
+void Histogramme::spread() {
 
-/*void Histogramme::egalize(){
-    
-    int histRcummul[256];
-    int histGcummul[256];
-    int histBcummul[256];
-    
-    for (int i = 0; i < 256; i++){
-        histRcummul[i] = 0;
-        histGcummul[i] = 0;
-        histBcummul[i] = 0;
-      }
-    
-    histRcummul[0] = histR[0];
-    histGcummul[0] = histG[0];
-    histBcummul[0] = histB[0];
-    
-    for (int i = 1; i < 256; i++){
-        histRcummul[i] = histR[i] + histRcummul[i-1] ;
-        histGcummul[i] = histG[i] + histGcummul[i-1] ;
-        histBcummul[i] = histB[i] + histBcummul[i-1] ;
-    }
-    
-    int newValR[256];
-    int newValG[256];
-    int newValB[256];
-    
-    for (int i = 0; i < 256; i++){
-        newValR[i] = -(255*histRcummul[i])/nb_pixel;
-        newValG[i] = -(255*histGcummul[i])/nb_pixel;
-        newValB[i] = -(255*histBcummul[i])/nb_pixel;
-    }
-    
-    int histRtmp[256];
-    int histGtmp[256];
-    int histBtmp[256];
-    
-    for (int i = 0; i < 256; i++){
-        histRtmp[i] = histR[i];
-        histR[i]=0;
-        histGtmp[i] = histG[i];
-        histG[i] = 0;
-        histBtmp[i] = histB[i];
-        histB[i]= 0;
-      }
-    
-    for (int i = 0; i < 256; i++){
-        histR[newValR[i]]= histR[i] + histRtmp[newValR[i]];
-        histG[newValG[i]]= histG[i] + histGtmp[newValG[i]];
-        histB[newValB[i]]= histB[i] + histBtmp[newValB[i]];
-    }
-    
-    maxY = 0;
-    maxU = 0;
-    maxV = 0;
-    
-    for (int i = 0; i < 256; ++i) {
-        if (maxR > histR[i])
-            maxR = histR[i];
-        if (maxG > histG[i])
-            maxG = histG[i];
-        if (maxB > histB[i])
-            maxB = histB[i];
+    int hist[256];
 
-        if (maxY > histY[i])
-            maxY = histY[i];
-        if (maxU > histU[i])
-            maxU = histU[i];
-        if (maxV > histV[i])
-            maxV = histV[i];
+    for (int i = 0; i < 256; i++) {
+        hist[i] = 0;
     }
-    QRgb newPix;
-    int r,g,b;
+
     for (int i = 0; i < img.width(); i++) {
         for (int j = 0; j < img.height(); j++) {
-            newPix = img.pixel(i,j);
-            r = newValR[qRed(newPix)];
-            g = newValG[qGreen(newPix)];
-            b = newValB[qBlue(newPix)];
-            img.setPixel(i,j,qRgb(r,g,b));
+            QColor p = img.pixel(i, j);
+            hist[p.toHsv().value()]++;
+        }
+    }
 
+
+    int min = 0, max = 255;
+
+    while (hist[min] == 0 || hist[max] == 0) {
+        if (hist[min] == 0 && min < 256) min++;
+        if (hist[max] == 0 && max >= 0) max--;
+    }
+std::cout << max << "  & min :" << min << std::endl;
+    int pente, oao;
+    pente = 255 / (max - min);
+    oao = -pente*min;
+
+    int newVal[256];
+
+    for (int i = 0; i < 256; i++) {
+  //      newVal[i] = std::min(255, std::max(0, pente * i + oao));
+        newVal[i] = std::min(std::max(0,255*(i-min)/(max-min)),255);
+    }
+
+    int h, s, v;
+    QColor* c;
+    for (int i = 0; i < img.width(); i++) {
+        for (int j = 0; j < img.height(); j++) {
+            c = new QColor(img.pixel(i, j));
+            h = c->hue();
+            s = c->saturation();
+            v = newVal[c->value()];
+            c->setHsv(h, s, v);
+            //if (v >200 ) std::cout << v << std::endl;
+            img.setPixel(i, j, c->rgb());
         }
     }
     pere->setImage(img);
     
+    for (int i = 0; i < 256; i++) {
+        hist[i] = 0;
+    }
+
+    for (int i = 0; i < img.width(); i++) {
+        for (int j = 0; j < img.height(); j++) {
+            QColor p = img.pixel(i, j);
+            hist[p.toHsv().value()]++;
+        }
+    }
+    
+    min = 0; max = 255;
+     while (hist[min] == 0 || hist[max] == 0) {
+        if (hist[min] == 0 && min < 256) min++;
+        if (hist[max] == 0 && max >= 0) max--;
+    }
+std::cout << max << "  & min :" << min << std::endl;
+
+
     changer_affichage_histo();
+
 }
 
-*/
+

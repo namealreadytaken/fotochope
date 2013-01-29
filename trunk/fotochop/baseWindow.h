@@ -8,6 +8,8 @@
 #ifndef _BASEWINDOW_H
 #define	_BASEWINDOW_H
 
+#define MAXHIST 5
+
 #include "ui_baseWindow.h"
 
 class baseWindow : public QMainWindow {
@@ -20,14 +22,13 @@ public:
     void setPixmap(QImage i);
     void greyScale();
     void blur();
-    void invert();
     QImage Sobel();
     void contentAware(int width, int height);
     void filtrer(int filtre[3][3], int div);
 public slots:
-    void on_loadButton_clicked();
+    //void on_loadButton_clicked();
     void on_cropButton_clicked();
-    void on_saveButton_clicked();
+    //void on_saveButton_clicked();
     void on_resizeButton_clicked();
     void on_pipetteButton_clicked();
     void on_greyButton_clicked();
@@ -36,6 +37,14 @@ public slots:
     void on_filtreButton_clicked();
     void on_fusionButton_clicked();
     void on_selectButton_clicked();
+    //void on_cancelButton_clicked();
+    //void on_redoButton_clicked();
+    void on_negButton_clicked();
+    void on_actionQuitter_triggered();
+    void on_actionCharger_triggered();
+    void on_actionEnregistrer_triggered();
+    void on_actionAnnuler_triggered();
+    void on_actionRefaire_triggered();
 private:
     Ui::MainWindow widget;
     QImage img;
@@ -48,7 +57,20 @@ private:
     QPoint pdragend;
     bool eventFilter(QObject* watched, QEvent* event);
     QRgb pxToGrey(QRgb px);
+    //int actHist;
+    /*
+        typedef struct Element {
+            QImage valeur;
+            Element* suivant;
+        } Element;
 
+        Element* liste;
+        Element * histAct;
+     * */
+    QImage hist[MAXHIST];
+    int actHist;
+    int min, max;
+    QImage* null;
 };
 int sortpx(const void* x, const void* y);
 #endif	/* _BASEWINDOW_H */

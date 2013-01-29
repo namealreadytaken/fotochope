@@ -24,12 +24,23 @@ baseWindow::baseWindow() {
     pipette = false;
     selectZone = false;
     selectSet = false;
+    //actHist = -1;
+    /*liste = NULL;
+    histAct = new Element;*/
+    actHist = -1;
+    min = -1;
+    max = -1;
+    null = new QImage();
+    for (int i = 0; i < MAXHIST; i++) {
+        hist[i] = *null;
+    }
+
 }
 
 baseWindow::~baseWindow() {
 }
 
-void baseWindow::on_loadButton_clicked() {
+void baseWindow::on_actionCharger_triggered() {
 
     QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image", "", tr("Images (*.png *.jpg *.gif *.pnm)"));
     QImage image;
@@ -90,7 +101,7 @@ void baseWindow::on_filtreButton_clicked() {
     f->show();
 }
 
-void baseWindow::on_saveButton_clicked() {
+void baseWindow::on_actionEnregistrer_triggered() {
     QImage image = img;
     QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image PNG (*.png);;Image JPG (*.jpg);;Image BMP (*.bmp);;Image TIFF (*.tiff)"));
     if (!fileName.isEmpty()) {
@@ -105,9 +116,75 @@ void baseWindow::setLabelSize(QSize s) {
 }
 
 void baseWindow::setImage(QImage i) {
+    //std::cout << "min : " << min << " max : " << max << " courant : " << actHist << std::endl;
+
+    /* Element* e = new Element;
+     e->valeur = i;
+     e->suivant = NULL;
+
+     if (liste == NULL) {
+
+         liste = e;
+     } else {
+         Element* eT = liste;
+         while (eT->suivant != NULL) {
+             eT = eT->suivant;
+         }
+         eT->suivant = e;
+     }
+     std::cout << "bla" << std::endl;
+     *histAct = *e;
+     std::cout << "bla" << std::endl;
+     */
+
+    if (actHist != max) {
+        actHist = (actHist + 1) % MAXHIST;
+        for (int hi = actHist; hi != max; hi = (hi + 1) % MAXHIST)
+            hist[hi] = *null;
+        max = actHist;
+    } else {
+        actHist = (actHist + 1) % MAXHIST;
+        max = (max + 1) % MAXHIST;
+        if (hist[actHist] != *null || min == max || min < 0) {
+            min = (min + 1) % MAXHIST;
+        }
+    }
+    hist[actHist] = i;
     setLabelSize(i.size());
     img = i;
     widget.resultLabel->setPixmap(QPixmap::fromImage(i));
+        std::cout << "min : " << min << " max : " << max << " courant : " << actHist << std::endl;
+}
+void baseWindow::on_actionQuitter_triggered(){
+    this->close();
+}
+
+void baseWindow::on_actionAnnuler_triggered() {
+    if (actHist != min) {
+        actHist = (actHist - 1) % MAXHIST;
+        if (actHist == -1)
+            actHist = MAXHIST-1;
+        img = hist[actHist];
+        setLabelSize(img.size());
+        widget.resultLabel->setPixmap(QPixmap::fromImage(img));
+    }
+    std::cout << "min : " << min << " max : " << max << " courant : " << actHist << std::endl;
+    
+            /*
+                Element* eT = liste;
+                if (liste != NULL) {
+                    if (liste->suivant != NULL) {
+                        // while (eT->suivant->suivant != NULL) {
+                        while (eT->suivant != histAct) {
+                            eT = eT->suivant;
+                        }
+                        img = eT->valeur;
+                        // eT->suivant = NULL;
+                        setLabelSize(img.size());
+                        widget.resultLabel->setPixmap(QPixmap::fromImage(img));
+                    }
+                }
+             */
 }
 
 void baseWindow::setPixmap(QImage i) {
@@ -123,6 +200,17 @@ void baseWindow::on_resizeButton_clicked() {
 void baseWindow::on_histoButton_clicked() {
     Histogramme* h = new Histogramme(this, img);
     h->show();
+}
+
+void baseWindow::on_actionRefaire_triggered() {
+    //setImage(histAct->suivant->valeur);
+    if (actHist != max) {
+        actHist = (actHist + 1) % MAXHIST;
+        img = hist[actHist];
+        setLabelSize(img.size());
+        widget.resultLabel->setPixmap(QPixmap::fromImage(img));
+    }
+        std::cout << "min : " << min << " max : " << max << " courant : " << actHist << std::endl;
 }
 
 bool baseWindow::eventFilter(QObject* watched, QEvent* event) {
@@ -361,7 +449,7 @@ void baseWindow::filtrer(int filtre[3][3], int div) {
     setImage(dest);
 }
 
-void baseWindow::invert() {
+void baseWindow::on_negButton_clicked() {
     QImage dest = img;
     QRgb rgb;
     for (int i = 0; i < img.width(); i++) {
@@ -395,8 +483,8 @@ void baseWindow::contentAware(int width, int height) {
         l[i][0] = i;
         l[i][1] = 0;
         for (int j = 0; j < image.height(); j++) {
-            l[i][1] += qRed(image.pixel(i, j))-5;
-            h[j][1] += qRed(image.pixel(i, j))-5;
+            l[i][1] += qRed(image.pixel(i, j)) - 5;
+            h[j][1] += qRed(image.pixel(i, j)) - 5;
         }
     }
     std::qsort(l, img.width(), sizeof (int[2]), &sortpx);

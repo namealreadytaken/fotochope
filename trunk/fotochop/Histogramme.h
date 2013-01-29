@@ -10,6 +10,7 @@
 
 #include "ui_Histogramme.h"
 #include "baseWindow.h"
+
 class Histogramme : public QDialog {
     Q_OBJECT
 public:
@@ -20,8 +21,10 @@ public slots:
     void on_checkG_stateChanged();
     void on_checkB_stateChanged();
     void on_egalizeButton_clicked();
+    void on_spreadButton_clicked();
     void on_YUVradio_toggled();
     void egalize();
+    void spread();
 private:
     baseWindow* pere;
     Ui::Histogramme widget;
