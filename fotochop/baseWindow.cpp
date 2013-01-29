@@ -46,6 +46,7 @@ void baseWindow::on_actionCharger_triggered() {
     QImage image;
     if (!fileName.isEmpty()) {
         image.load(fileName);
+        setWindowTitle(fileName);
         setImage(image);
         img = image;
     }
@@ -83,8 +84,6 @@ void baseWindow::on_blurButton_clicked() {
 }
 
 void baseWindow::on_fusionButton_clicked() {
-
-
     QString fileName = QFileDialog::getOpenFileName(this, "Choisir l'image", "", tr("Images (*.png *.jpg *.gif *.pnm)"));
     QImage image;
     if (!fileName.isEmpty()) {
