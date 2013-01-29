@@ -294,16 +294,10 @@ void Histogramme::spread() {
         if (hist[min] == 0 && min < 256) min++;
         if (hist[max] == 0 && max >= 0) max--;
     }
-std::cout << max << "  & min :" << min << std::endl;
-    int pente, oao;
-    pente = 255 / (max - min);
-    oao = -pente*min;
-
     int newVal[256];
 
     for (int i = 0; i < 256; i++) {
-  //      newVal[i] = std::min(255, std::max(0, pente * i + oao));
-        newVal[i] = std::min(std::max(0,255*(i-min)/(max-min)),255);
+        newVal[i] = std::min(std::max(0, 255 * (i - min) / (max - min)), 255);
     }
 
     int h, s, v;
@@ -320,7 +314,7 @@ std::cout << max << "  & min :" << min << std::endl;
         }
     }
     pere->setImage(img);
-    
+
     for (int i = 0; i < 256; i++) {
         hist[i] = 0;
     }
@@ -331,13 +325,14 @@ std::cout << max << "  & min :" << min << std::endl;
             hist[p.toHsv().value()]++;
         }
     }
-    
-    min = 0; max = 255;
-     while (hist[min] == 0 || hist[max] == 0) {
+
+    min = 0;
+    max = 255;
+    while (hist[min] == 0 || hist[max] == 0) {
         if (hist[min] == 0 && min < 256) min++;
         if (hist[max] == 0 && max >= 0) max--;
     }
-std::cout << max << "  & min :" << min << std::endl;
+    std::cout << max << "  & min :" << min << std::endl;
 
 
     changer_affichage_histo();

@@ -22,9 +22,10 @@ public:
     void setPixmap(QImage i);
     void greyScale();
     void blur();
-    QImage Sobel();
+    QImage Sobel(QImage source);
     void contentAware(int width, int height);
     void filtrer(int filtre[3][3], int div);
+    QImage img;
 public slots:
     //void on_loadButton_clicked();
     void on_cropButton_clicked();
@@ -47,7 +48,6 @@ public slots:
     void on_actionRefaire_triggered();
 private:
     Ui::MainWindow widget;
-    QImage img;
     bool selectSet;
     bool selectZone;
     bool pipette;

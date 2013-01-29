@@ -37,7 +37,7 @@ void Filtre::on_okButton_clicked() {
         div = widget.diviseur->text().toInt();
         pere->filtrer(Filtre, div);
     } else {
-        pere->setImage(pere->Sobel());
+        pere->setImage(pere->Sobel(pere->img));
     }
     this->close();
 }
