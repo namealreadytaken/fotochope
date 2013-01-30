@@ -464,10 +464,10 @@ void baseWindow::contentAware(int width, int height) {
     QImage* dest = new QImage(width, height, QImage::Format_ARGB32_Premultiplied);
     double ratiov = double(img.height()) / double(height);
     double ratioh = double(img.width()) / double(width);
-    bool todelete = false;
+    bool todelete = false, tocopy = false;
     int diffh = std::abs(img.height() - height);
     int diffw = std::abs(img.width() - width);
-    int nbdeleted = 0;
+    int nbdeleted = 0, nbcopied = 0;
     int w[image.width()][2], w2[image.width()][2]; //0= pos du px, 1= somme de la colonne
     int h[image.height()][2], h2[image.height()][2];
     int rgb;
@@ -486,13 +486,12 @@ void baseWindow::contentAware(int width, int height) {
         w2[i][1] = 0;
         for (int j = 0; j < image.height(); j++) {
             rgb = qRed(image.pixel(i, j));
-            w[i][1] += rgb - 10;
-            h[j][1] += rgb - 10;
-            w2[i][1] += rgb - 10;
-            h2[j][1] += rgb - 10;
+            w[i][1] += std::max(0, rgb - 10);
+            h[j][1] += std::max(0, rgb - 10);
+            w2[i][1] += std::max(0, rgb - 10);
+            h2[j][1] += std::max(0, rgb - 10);
         }
     }
-
     std::qsort(w2, image.width(), sizeof (int[2]), &sortpx);
     std::qsort(h2, image.height(), sizeof (int[2]), &sortpx);
 
@@ -515,27 +514,31 @@ void baseWindow::contentAware(int width, int height) {
             }
         }
     } else {
-
-        hmaxval = std::min(h2[diffh][1], h2[image.height() / 2][1]);
-        int hmaxpos = std::min(h2[diffh][0], h2[image.height() / 2][0]);
-
-
+        hmaxval = std::min(h2[diffh][1], h2[image.height() / 4][1]);
+        int hmaxpos;
+        if (hmaxval == h2[diffh][1]) {
+            hmaxpos = diffh;
+        } else {
+            hmaxpos = image.height() / 4;
+        }
+        std::cout << diffh / hmaxpos << std::endl;
         for (int j = 0; j < img.height(); j++) {
-            todelete = false;
-            if (h[j][1] <= hmaxval && nbdeleted < diffw) {
-                todelete = true;
+            tocopy = false;
+            std::cout << "copie:" << nbcopied << "/" << diffh << std::endl;
+            if (h[j][1] <= hmaxval && nbcopied < diffh) {
+                tocopy = true;
             }
-            if (!todelete) {
+            if (!tocopy) {
                 for (int i = 0; i < img.width(); i++) {
-                    temp->setPixel(i, j + nbdeleted, img.pixel(i, j));
+                    temp->setPixel(i, j + nbcopied, img.pixel(i, j));
                 }
             } else {
                 for (int i = 0; i < img.width(); i++) {
-                    for (int k = j; k <= j + ((double) 1 / ratiov); k++) {
-                        temp->setPixel(i, k + nbdeleted, img.pixel(i, j));
+                    for (int k = j; k <= j + std::max((int) ceil((double) diffh / (double) hmaxpos), 1); k++) {
+                        temp->setPixel(i, k + nbcopied, img.pixel(i, j));
                     }
                 }
-                nbdeleted += ((double) 1 / ratiov);
+                nbcopied += std::max((diffh / hmaxpos), 1);
             }
         }
     }
@@ -550,31 +553,36 @@ void baseWindow::contentAware(int width, int height) {
             }
             if (!todelete) {
                 for (int j = 0; j < height; j++) {
-                    dest->setPixel(i + nbdeleted, j, temp->pixel(i, j));
+                    dest->setPixel(i - nbdeleted, j, temp->pixel(i, j));
                 }
             }
         }
     } else {
-
-        wmaxval = std::min(w2[diffw][1], w2[image.width() / 2][1]);
-        int wmaxpos = std::min(w2[diffw][0], w2[image.height() / 2][0]);
-        nbdeleted = 0;
+        wmaxval = std::min(w2[diffw][1], w2[image.height() / 4][1]);
+        int wmaxpos;
+        if (wmaxval == w2[diffw][1]) {
+            wmaxpos = diffw;
+        } else {
+            wmaxpos = image.height() / 4;
+        }
+        nbcopied = 0;
+        std::cout << diffw / wmaxpos << std::endl;
         for (int i = 0; i < image.width(); i++) {
-            todelete = false;
-            if (w[i][1] <= wmaxval && nbdeleted < diffw) {
-                todelete = true;
+            tocopy = false;
+            if (w[i][1] <= wmaxval && nbcopied < diffw) {
+                tocopy = true;
             }
-            if (!todelete) {
+            if (!tocopy) {
                 for (int j = 0; j < height; j++) {
-                    dest->setPixel(i + nbdeleted, j, temp->pixel(i, j));
+                    dest->setPixel(i + nbcopied, j, temp->pixel(i, j));
                 }
             } else {
                 for (int j = 0; j < height; j++) {
-                    for (int k = i; k <= i + ((double) 1 / ratioh); k++) {
-                        dest->setPixel(k + nbdeleted, j, temp->pixel(i, j));
+                    for (int k = i; k <= i + std::max((int) ceil((double) diffw / (double) wmaxpos), 1); k++) {
+                        dest->setPixel(k + nbcopied, j, temp->pixel(i, j));
                     }
                 }
-                nbdeleted += ((double) 1 / ratioh);
+                nbcopied += std::max((diffw / wmaxpos), 1);
             }
         }
     }
