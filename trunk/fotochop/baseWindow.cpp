@@ -495,10 +495,6 @@ void baseWindow::contentAware(int width, int height) {
     std::qsort(w2, image.width(), sizeof (int[2]), &sortpx);
     std::qsort(h2, image.height(), sizeof (int[2]), &sortpx);
 
-
-
-
-
     if (ratiov > 1) {// on fait la diminution verticale
         hmaxval = h2[diffh][1];
         for (int j = 0; j < img.height(); j++) {
@@ -520,15 +516,13 @@ void baseWindow::contentAware(int width, int height) {
             hmaxpos = diffh;
         } else {
             hmaxpos = image.height() / 4;
-        }
-        std::cout << diffh / hmaxpos << std::endl;
+        }//hmaxpos contient le nombre de lignes qui vont etres copiées plusieurs fois
         for (int j = 0; j < img.height(); j++) {
             tocopy = false;
-            std::cout << "copie:" << nbcopied << "/" << diffh << std::endl;
             if (h[j][1] <= hmaxval && nbcopied < diffh) {
                 tocopy = true;
             }
-            if (!tocopy) {
+            if (!tocopy) {//si la valeur est grande on la copie 1 fois
                 for (int i = 0; i < img.width(); i++) {
                     temp->setPixel(i, j + nbcopied, img.pixel(i, j));
                 }
@@ -566,7 +560,6 @@ void baseWindow::contentAware(int width, int height) {
             wmaxpos = image.height() / 4;
         }
         nbcopied = 0;
-        std::cout << diffw / wmaxpos << std::endl;
         for (int i = 0; i < image.width(); i++) {
             tocopy = false;
             if (w[i][1] <= wmaxval && nbcopied < diffw) {
