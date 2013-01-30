@@ -495,12 +495,13 @@ void baseWindow::contentAware(int width, int height) {
 
     std::qsort(w2, image.width(), sizeof (int[2]), &sortpx);
     std::qsort(h2, image.height(), sizeof (int[2]), &sortpx);
-    wmaxval = w2[diffw][1];
-    hmaxval = h2[diffh][1];
+
+
 
 
 
     if (ratiov > 1) {// on fait la diminution verticale
+        hmaxval = h2[diffh][1];
         for (int j = 0; j < img.height(); j++) {
             todelete = false;
             if (h[j][1] <= hmaxval && nbdeleted < diffh) {
@@ -513,19 +514,33 @@ void baseWindow::contentAware(int width, int height) {
                 }
             }
         }
+    } else {
+
+        hmaxval = std::min(h2[diffh][1], h2[image.height() / 2][1]);
+        int hmaxpos = std::min(h2[diffh][0], h2[image.height() / 2][0]);
+
+
+        for (int j = 0; j < img.height(); j++) {
+            todelete = false;
+            if (h[j][1] <= hmaxval && nbdeleted < diffw) {
+                todelete = true;
+            }
+            if (!todelete) {
+                for (int i = 0; i < img.width(); i++) {
+                    temp->setPixel(i, j + nbdeleted, img.pixel(i, j));
+                }
+            } else {
+                for (int i = 0; i < img.width(); i++) {
+                    for (int k = j; k <= j + ((double) 1 / ratiov); k++) {
+                        temp->setPixel(i, k + nbdeleted, img.pixel(i, j));
+                    }
+                }
+                nbdeleted += ((double) 1 / ratiov);
+            }
+        }
     }
-    //        else {
-    //        for (int i = 0; i < image.width(); i++) {
-    //            for (int j = 0; j < image.height(); j++) {
-    //
-    //                for (int k = j * ((double) 1 / ratiov); k <= j * ((double) 1 / ratiov) + ((double) 1 / ratiov); k++) {
-    //
-    //                }
-    //            }
-    //        }
-    //    }
-    //
     if (ratioh > 1) {// on fait la diminution horizontale
+        wmaxval = w2[diffw][1];
         nbdeleted = 0;
         for (int i = 0; i < image.width(); i++) {
             todelete = false;
@@ -535,21 +550,34 @@ void baseWindow::contentAware(int width, int height) {
             }
             if (!todelete) {
                 for (int j = 0; j < height; j++) {
-                    dest->setPixel(i - nbdeleted, j, temp->pixel(i, j));
+                    dest->setPixel(i + nbdeleted, j, temp->pixel(i, j));
                 }
             }
         }
+    } else {
+
+        wmaxval = std::min(w2[diffw][1], w2[image.width() / 2][1]);
+        int wmaxpos = std::min(w2[diffw][0], w2[image.height() / 2][0]);
+        nbdeleted = 0;
+        for (int i = 0; i < image.width(); i++) {
+            todelete = false;
+            if (w[i][1] <= wmaxval && nbdeleted < diffw) {
+                todelete = true;
+            }
+            if (!todelete) {
+                for (int j = 0; j < height; j++) {
+                    dest->setPixel(i + nbdeleted, j, temp->pixel(i, j));
+                }
+            } else {
+                for (int j = 0; j < height; j++) {
+                    for (int k = i; k <= i + ((double) 1 / ratioh); k++) {
+                        dest->setPixel(k + nbdeleted, j, temp->pixel(i, j));
+                    }
+                }
+                nbdeleted += ((double) 1 / ratioh);
+            }
+        }
     }
-    //        else {
-    //        for (int i = 0; i < image3->width(); i++) {
-    //            for (int j = 0; j < image3->height(); j++) {
-    //                px = image3->pixel(i, j);
-    //                for (int k = i * ((double) 1 / ratioh); k <= i * ((double) 1 / ratioh) +((double) 1 / ratioh); k++) {
-    //                    image2->setPixel(k, j, px);
-    //                }
-    //            }
-    //        }
-    //    }
 
     setImage(*dest);
 
