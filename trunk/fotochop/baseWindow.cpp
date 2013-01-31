@@ -57,8 +57,8 @@ void baseWindow::on_cropButton_clicked() {
     if (pstart != pend) {
         QImage image = img;
         QImage* cropped = new QImage(abs(pstart.x() - pend.x()), abs(pstart.y() - pend.y()), QImage::Format_ARGB32_Premultiplied);
-        for (int i = std::min(pstart.x(), pend.x()); i < std::max(pstart.x(), pend.x()); i++) {
-            for (int j = std::min(pstart.y(), pend.y()); j < std::max(pstart.y(), pend.y()); j++) {
+        for (int i = std::max(0,std::min(pstart.x(), pend.x())); i < std::min(std::max(pstart.x(), pend.x()),img.width()); i++) {
+            for (int j = std::max(0,std::min(pstart.y(), pend.y())); j < std::min(std::max(pstart.y(), pend.y()),img.height()); j++) {
                 cropped->setPixel(i - std::min(pstart.x(), pend.x()), j - std::min(pstart.y(), pend.y()), image.pixel(i, j));
             }
         }
@@ -106,7 +106,7 @@ void baseWindow::on_filtreButton_clicked() {
 
 void baseWindow::on_actionEnregistrer_triggered() {
     QImage image = img;
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image PNG (*.png);;Image JPG (*.jpg);;Image BMP (*.bmp);;Image TIFF (*.tiff)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer l'image"), "", tr("Image JPG (*.jpg);;Image PNG (*.png);;Image BMP (*.bmp);;Image TIFF (*.tiff)"));
     if (!fileName.isEmpty()) {
         image.save(fileName);
     }
@@ -119,27 +119,6 @@ void baseWindow::setLabelSize(QSize s) {
 }
 
 void baseWindow::setImage(QImage i) {
-    //std::cout << "min : " << min << " max : " << max << " courant : " << actHist << std::endl;
-
-    /* Element* e = new Element;
-     e->valeur = i;
-     e->suivant = NULL;
-
-     if (liste == NULL) {
-
-         liste = e;
-     } else {
-         Element* eT = liste;
-         while (eT->suivant != NULL) {
-             eT = eT->suivant;
-         }
-         eT->suivant = e;
-     }
-     std::cout << "bla" << std::endl;
-     *histAct = *e;
-     std::cout << "bla" << std::endl;
-     */
-
     if (actHist != max) {
         actHist = (actHist + 1) % MAXHIST;
         for (int hi = actHist; hi != max; hi = (hi + 1) % MAXHIST)
@@ -171,22 +150,6 @@ void baseWindow::on_actionAnnuler_triggered() {
         setLabelSize(img.size());
         widget.resultLabel->setPixmap(QPixmap::fromImage(img));
     }
-
-    /*
-        Element* eT = liste;
-        if (liste != NULL) {
-            if (liste->suivant != NULL) {
-                // while (eT->suivant->suivant != NULL) {
-                while (eT->suivant != histAct) {
-                    eT = eT->suivant;
-                }
-                img = eT->valeur;
-                // eT->suivant = NULL;
-                setLabelSize(img.size());
-                widget.resultLabel->setPixmap(QPixmap::fromImage(img));
-            }
-        }
-     */
 }
 
 void baseWindow::setPixmap(QImage i) {
@@ -347,7 +310,7 @@ void baseWindow::blur() {
 QImage baseWindow::Sobel(QImage source) {
     int GX[3][3];
     int GY[3][3];
-    /* 3x3 GX Sobel mask.  Ref: www.cee.hw.ac.uk/hipr/html/sobel.html */
+    /* 3x3 GX Sobel mask. */
     GX[0][0] = -1;
     GX[0][1] = 0;
     GX[0][2] = 1;
@@ -358,7 +321,7 @@ QImage baseWindow::Sobel(QImage source) {
     GX[2][1] = 0;
     GX[2][2] = 1;
 
-    /* 3x3 GY Sobel mask.  Ref: www.cee.hw.ac.uk/hipr/html/sobel.html */
+    /* 3x3 GY Sobel mask. */
     GY[0][0] = 1;
     GY[0][1] = 2;
     GY[0][2] = 1;
@@ -384,7 +347,6 @@ QImage baseWindow::Sobel(QImage source) {
             } else {
                 sumX = 0;
                 sumY = 0;
-                /*-------X and Y GRADIENT APPROXIMATION------*/
                 for (I = -1; I <= 1; I++) {
                     for (J = -1; J <= 1; J++) {
                         rawColour = source.pixel(x + I, y + J);
@@ -400,7 +362,6 @@ QImage baseWindow::Sobel(QImage source) {
             sobelDestination.setPixel(x, y, qRgb(SUM, SUM, SUM));
         }
     }
-    //    setImage(sobelDestination);
     return sobelDestination;
 }
 
@@ -412,7 +373,6 @@ void baseWindow::filtrer(int filtre[3][3], int div) {
     int sum[4];
     int I, J;
     QRgb rgb;
-
     if (div == 0)
         div++;
     for (int y = 0; y < height; ++y) {
@@ -491,10 +451,10 @@ void baseWindow::contentAware(int width, int height) {
         w2[i][1] = 0;
         for (int j = 0; j < image.height(); j++) {
             rgb = qRed(image.pixel(i, j));
-            w[i][1] += std::max(0, rgb - 10);
-            h[j][1] += std::max(0, rgb - 10);
-            w2[i][1] += std::max(0, rgb - 10);
-            h2[j][1] += std::max(0, rgb - 10);
+            w[i][1] += std::max(0, rgb - 5);
+            h[j][1] += std::max(0, rgb - 5);
+            w2[i][1] += std::max(0, rgb - 5);
+            h2[j][1] += std::max(0, rgb - 5);
         }
     }
     std::qsort(w2, image.width(), sizeof (int[2]), &sortpx);
