@@ -20,7 +20,7 @@ public:
     void setLabelSize(QSize s);
     void setImage(QImage i);
     void setPixmap(QImage i);
-    void greyScale();
+    //void greyScale();
     void blur();
     QImage Sobel(QImage source);
     void contentAware(int width, int height);
@@ -56,7 +56,7 @@ private:
     QPoint pdragstart;
     QPoint pdragend;
     bool eventFilter(QObject* watched, QEvent* event);
-    QRgb pxToGrey(QRgb px);
+    //QRgb pxToGrey(QRgb px);
     //int actHist;
     /*
         typedef struct Element {
