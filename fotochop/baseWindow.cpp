@@ -11,6 +11,7 @@
 #include "Pipette.h"
 #include "Fusion.h"
 #include "filtre.h"
+#include "greyScale.h"
 #include <QtGui>
 #include <iostream>
 #include <QDesktopWidget>
@@ -76,7 +77,10 @@ void baseWindow::on_pipetteButton_clicked() {
 }
 
 void baseWindow::on_greyButton_clicked() {
-    greyScale();
+    //greyScale();
+    greyScale* f = new greyScale(this);
+    f->show();
+
 }
 
 void baseWindow::on_blurButton_clicked() {
@@ -274,6 +278,7 @@ bool baseWindow::eventFilter(QObject* watched, QEvent* event) {
     return false;
 }
 
+/*
 void baseWindow::greyScale() {
     QImage image = widget.resultLabel->pixmap()->toImage();
     for (int i = 0; i < image.width(); i++) {
@@ -290,7 +295,7 @@ QRgb baseWindow::pxToGrey(QRgb px) {
     int a = (qRed(px)*0.21 + 0.71 * qGreen(px) + 0.07 * qBlue(px)); //d'après la C.I.E (Commission Internationale de l'Éclairage)
     return qRgba(a, a, a, qAlpha(px));
 }
-
+ */
 void baseWindow::blur() {
     int sum[4];
     int radius = 2, out;
